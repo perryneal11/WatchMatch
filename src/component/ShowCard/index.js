@@ -2,7 +2,7 @@ import React from 'react';
 import {Text, View, ImageBackground, StyleSheet} from 'react-native';
 
 const Card = props => {
-  const {name, image, bio} = props.show;
+  const {name, image, bio} = props.user;
   return (
     <View style={styles.card}>
       <ImageBackground source={{uri: image}} style={styles.image}>
@@ -25,6 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   card: {
+    backgroundColor: 'white',
     width: '100%',
     height: '100%',
     borderRadius: 10,
