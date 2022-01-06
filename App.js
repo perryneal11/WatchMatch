@@ -1,6 +1,7 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import HomeScreen from './src/screens/Homescreen.js';
+import MatchesScreen from './src/screens/MatchesScreen.js'
 
 const App = () => {
 
@@ -8,7 +9,7 @@ const App = () => {
   return (
 
       <View style={styles.pageContainer}>
-        <HomeScreen></HomeScreen>
+        <MatchesScreen></MatchesScreen>
   
       </View>
       
