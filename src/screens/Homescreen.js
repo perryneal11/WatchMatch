@@ -14,7 +14,6 @@ const HomeScreen = () => {
   } 
    
   return (
-
       <View style={styles.pageContainer}>
       <AnimatedStack
         data={users}
@@ -23,8 +22,6 @@ const HomeScreen = () => {
         onSwipeRight = {onSwipeRight}>
       </AnimatedStack>   
       </View>
-      
-    
   );
 };
 
