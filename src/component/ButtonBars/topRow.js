@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View, StyleSheet, Pressable} from 'react-native'
+import {View, StyleSheet, Pressable} from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons'; 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
