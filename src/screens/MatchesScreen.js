@@ -1,10 +1,12 @@
 import React  from "react";
 import {View, Text, SafeAreaView, StyleSheet, Image} from 'react-native';
 import users from '../../assets/data/users'
+import TopRow from "../component/ButtonBars/topRow";
 
 const MatchesScreen = () => {
     return(
         <SafeAreaView style = {styles.root}>
+            <TopRow></TopRow>
             <Text>Shows you both like</Text>
             <View style={users}>
                 {users.map(user => (

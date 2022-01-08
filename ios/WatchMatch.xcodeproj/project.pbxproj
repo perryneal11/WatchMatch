@@ -145,7 +145,6 @@
 				6C5088686594738DEFDC491F /* Pods-WatchMatch-WatchMatchTests.debug.xcconfig */,
 				2388DB96A6CDDDF3E2834CCA /* Pods-WatchMatch-WatchMatchTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
