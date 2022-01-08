@@ -5,10 +5,16 @@ import HomeScreen from './src/screens/Homescreen.js';
 import { NavigationContainer, useLinkProps, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MatchesScreen from './src/screens/MatchesScreen.js';
+import Amplify from 'aws-amplify'
+import {withAuthenticator} from 'aws-amplify-react-native'
+import config from './src/aws-exports.js'
 
+Amplify.configure(config)
 const App = () => {
 
   const Stack = createNativeStackNavigator();
+
+
 
   return (
     <NavigationContainer>
@@ -38,4 +44,4 @@ const styles = StyleSheet.create({
     padding: 10,
   },});
 
-export default App;
+export default withAuthenticator(App);
