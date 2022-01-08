@@ -23,8 +23,8 @@ return <View style ={styles.topNavigation}>
 <Pressable onPress={() => setActiveScreen('FRIENDS')}>
   <MaterialCommunityIcons name="star-four-points" color={activeScreen === 'FRIENDS' ? activeIconColor : color} size = {24} ></MaterialCommunityIcons>
 </Pressable>
-<Pressable>
-<FontAwesome name = "user" color={color} size = {24}></FontAwesome>
+<Pressable onPress={() => {setActiveScreen('PROFILE'); navigation.navigate('Profile');}}>
+<FontAwesome name = "user" color={activeScreen === 'PROFILE' ? activeIconColor : color} size = {24}></FontAwesome>
 </Pressable>
 </View>
  
