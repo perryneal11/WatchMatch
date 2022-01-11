@@ -10,7 +10,17 @@ import Amplify from 'aws-amplify'
 import {withAuthenticator} from 'aws-amplify-react-native'
 import config from './src/aws-exports.js'
 
-Amplify.configure(config)
+Amplify.configure({
+  ...config,
+  Analytics: {
+    disabled: true,
+  },
+});
+
+Amplify.Logger.LOG_LEVEL = "DEBUG";
+
+
+
 const App = () => {
 
   const Stack = createNativeStackNavigator();

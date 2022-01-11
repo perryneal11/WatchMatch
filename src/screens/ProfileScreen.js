@@ -1,54 +1,49 @@
 import React, {useState} from "react";
 import {View, Text, SafeAreaView, StyleSheet, Image, Pressable} from 'react-native';
-import users from '../../assets/data/users'
 import TopRow from "../component/ButtonBars/topRow";
-import {Auth} from 'aws-amplify'
+import {Auth, DataStore} from 'aws-amplify'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import {User} from '../models'
 
 const ProfileScreen = () => {
-    const save =() => {};
-    const handleCheckboxPress=() => {}
-    const [checked, setChecked] = useState(false)
 
+    const [netflix, setNetflix] = useState(true)
+    const [prime, setPrime] = useState(true)
+    const user = Auth.currentAuthenticatedUser();
+
+
+    const save =() => { 
+        const newUser = new User({
+            Netflix: netflix
+            
+    })
+
+        DataStore.save(newUser)
+    };
+    
     return(
         <SafeAreaView style = {styles.root}>
             <View style = {styles.container}>
             <TopRow></TopRow>
-            <Text>Streaming Services</Text>
+            <Text> Streaming Services</Text>
             
-     
-            <Pressable onPress={handleCheckboxPress} style={styles.option}>
-            <BouncyCheckbox onPress={( ) => {}} />
-                <Text>Netflix</Text>
+            <Pressable  style={styles.option}>
+            <BouncyCheckbox 
+                isPressed={netflix}
+                onPress={setNetflix} />
+                <Text ></Text>
             </Pressable>
 
-
-            <Pressable onPress={handleCheckboxPress} style={styles.option}>
-            <BouncyCheckbox onPress={( ) => {}} style = {styles.checkbox}/>
-                <Text>Disney</Text>
+            <Pressable onPress={save} style = {styles.button}>
+                <Text>Save changes</Text>
             </Pressable>
 
-            <Pressable onPress={handleCheckboxPress} style={styles.option}>
-            <BouncyCheckbox onPress={( ) => {}} />
-                <Text>Prime</Text>
-            </Pressable>
-
-            <Pressable onPress={handleCheckboxPress} style={styles.option}>
-            <BouncyCheckbox onPress={( ) => {}} />
-                <Text>Hulu</Text>
-            </Pressable>
-
-
-            <Pressable onPress={() => Auth.signOut()} style = {styles.button}>
+            <Pressable onPress={Auth.signOut} style = {styles.button}>
                 <Text>Sign out</Text>
             </Pressable>
 
-            <Pressable onPress={() => {save}} style = {styles.button}>
-                <Text>Save changes</Text>
-            </Pressable>
             </View>
         </SafeAreaView>
-        
     )}
 
 const styles = StyleSheet.create({
@@ -64,7 +59,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 20,
         margin: 10
-        
     },
     container: {
         padding: 10 
@@ -77,10 +71,7 @@ const styles = StyleSheet.create({
     },
     checkbox: {
         justifyContent: 'flex-start'
-
     }
-
-
  }) 
 
 export default ProfileScreen 
