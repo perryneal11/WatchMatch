@@ -1,24 +1,51 @@
-import React, {useState} from "react";
-import {View, Text, SafeAreaView, StyleSheet, Image, Pressable} from 'react-native';
+import React, {useEffect, useState} from "react";
+import {View, Text, SafeAreaView, StyleSheet, Image, Pressable, Alert} from 'react-native';
 import TopRow from "../component/ButtonBars/topRow";
 import {Auth, DataStore} from 'aws-amplify'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {User} from '../models'
 
 const ProfileScreen = () => {
-
+    const [user, setUser] = useState(null)
     const [netflix, setNetflix] = useState(true)
     const [prime, setPrime] = useState(true)
-    const user = Auth.currentAuthenticatedUser();
 
+    useEffect(() => {
+        const getCurrentUser = async ()=> {
+            const user = await Auth.currentAuthenticatedUser()
+            const dbUsers = await DataStore.query(User, u => u.awsID === user.attributes.sub)
+        if(dbUsers.length < 0) {
+            return;
+        }
+        const dbUser = dbUsers[0];
+        setUser(dbUser)
+        setNetflix(dbUser.Netflix)
+        setPrime(dbUser.Prime)
+    }
+        getCurrentUser();
 
-    const save =() => { 
-        const newUser = new User({
-            Netflix: netflix
-            
-    })
+    },[])
 
-        DataStore.save(newUser)
+    const save = async () => { 
+        if(user) {
+            const updateUser = User.copyOf(user, updated => {
+                updated.Prime = prime,
+                updated.Netflix = netflix
+            })
+            await DataStore.save(updateUser)
+            Alert.alert("User updated")
+        } else {
+            //create new user 
+            const authUser = await Auth.currentAuthenticatedUser()
+            const newUser = new User({
+                Netflix: netflix,
+                Prime: prime,
+                awsID: authUser.attributes.sub,
+                username: authUser.attributes.email
+            })
+            await DataStore.save(newUser)
+            Alert.alert("New user created")
+        }
     };
     
     return(
@@ -27,11 +54,20 @@ const ProfileScreen = () => {
             <TopRow></TopRow>
             <Text> Streaming Services</Text>
             
-            <Pressable  style={styles.option}>
+            <Pressable style={styles.option}>
             <BouncyCheckbox 
-                isPressed={netflix}
-                onPress={setNetflix} />
-                <Text ></Text>
+                text="Netflix"
+                disableBuiltInState
+                isChecked={netflix}
+                onPress={() => {setNetflix(!netflix)}}/>
+
+            </Pressable>
+
+            <Pressable style={styles.option}>
+            <BouncyCheckbox 
+                isChecked={prime}
+                onPress={setPrime} />
+                <Text >Prime</Text>
             </Pressable>
 
             <Pressable onPress={save} style = {styles.button}>
@@ -44,7 +80,8 @@ const ProfileScreen = () => {
 
             </View>
         </SafeAreaView>
-    )}
+    )
+};
 
 const styles = StyleSheet.create({
     root: {

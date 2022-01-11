@@ -48,6 +48,20 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
+                "username": {
+                    "name": "username",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "awsID": {
+                    "name": "awsID",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": true,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -93,5 +107,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "911717a6ee1886680644a75bb5fdf747"
+    "version": "19a7684f2a7e1c5f9ffd1bcfc7336693"
 };

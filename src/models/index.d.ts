@@ -15,6 +15,8 @@ export declare class User {
   readonly approvedContentIMDBID?: (string | null)[];
   readonly unapprovedContentIMDB?: (string | null)[];
   readonly friends?: (string | null)[];
+  readonly username: string;
+  readonly awsID: string;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<User, UserMetaData>);

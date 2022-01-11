@@ -5,4 +5,7 @@ type User @model @auth(rules: [{allow: public}]) {
   approvedContentIMDBID: [String]
   unapprovedContentIMDB: [String]
   friends: [String]
+  username: String!
+  awsID: String!
 }
+ 
