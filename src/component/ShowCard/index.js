@@ -2,21 +2,18 @@ import React from 'react';
 import {Text, View, ImageBackground, StyleSheet} from 'react-native';
 
 const Card = props => {
-  const {title, url, description} = props.movie;
+  const {title, url, overview} = props.movie;
   const image =  "https://image.tmdb.org/t/p/w300/" + props.image.toString()
 
-  console.log(image)
+  console.log(props.movie)
   
- 
-  //console.log(url)
-  //console.log(description)
 
   return (
     <View style={styles.card}>
       <ImageBackground source={{uri: image}} style={styles.image}>
         <View style={styles.cardInner}>
           <Text style={styles.name}>{title}</Text>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.description}>{overview}</Text>
         </View>
       </ImageBackground>
     </View>
@@ -53,7 +50,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   description: {
-    fontSize: 30,
+    fontSize: 20,
     color: 'white',
     fontWeight: 'bold',
   },
