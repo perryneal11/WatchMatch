@@ -2,7 +2,6 @@ import React from 'react';
 import {View, StyleSheet, SafeAreaView, Pressable} from 'react-native';
 import HomeScreen from './src/screens/Homescreen.js';
 import ProfileScreen from './src/screens/ProfileScreen.js';
-
 import { NavigationContainer, useLinkProps, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MatchesScreen from './src/screens/MatchesScreen.js';
@@ -19,14 +18,9 @@ Amplify.configure({
 
 Amplify.Logger.LOG_LEVEL = "DEBUG";
 
-
-
 const App = () => {
 
   const Stack = createNativeStackNavigator();
-
-
-
   return (
     <NavigationContainer>
       <SafeAreaView style = {styles.root}>

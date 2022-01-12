@@ -10,6 +10,21 @@ import TopRow from '../component/ButtonBars/topRow';
 
 const HomeScreen = () => {
 
+  const data = users
+
+   fetch("https://streaming-availability.p.rapidapi.com/search/basic?country=us&service=netflix&type=movie&output_language=en&language=en", {
+    "method": "GET",
+    "headers": {
+      "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+      "x-rapidapi-key": "db460db4c2msha835e81c42d874ep1c1433jsnb1e93e0e6758"
+    }
+  })
+  .then(response => response.json())
+  .then(data => movieData = data.results)
+  .catch(err => {
+    console.error(err);
+  });
+
   const onSwipeLeft = (user) => {
       console.log('LEFT')
   } 
@@ -21,7 +36,7 @@ const HomeScreen = () => {
     <View style={styles.pageContainer}>
       <TopRow></TopRow>
       <AnimatedStack
-      data={users}
+      data={data}
       renderItem = {({item}) => <Card user={item} />}
       onSwipeLeft = {onSwipeLeft}
       onSwipeRight = {onSwipeRight}>

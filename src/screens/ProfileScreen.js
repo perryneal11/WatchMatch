@@ -60,23 +60,26 @@ const ProfileScreen = () => {
                 disableBuiltInState
                 isChecked={netflix}
                 onPress={() => {setNetflix(!netflix)}}/>
-
             </Pressable>
 
             <Pressable style={styles.option}>
             <BouncyCheckbox 
+                text="Prime"
+                disableBuiltInState
                 isChecked={prime}
-                onPress={setPrime} />
-                <Text >Prime</Text>
+                onPress={() => {setPrime(!prime)}}/>
             </Pressable>
 
-            <Pressable onPress={save} style = {styles.button}>
-                <Text>Save changes</Text>
-            </Pressable>
+            <View style = {styles.bottom}>
+                <Pressable onPress={save} style = {styles.button}>
+                    <Text>Save changes</Text>
+                </Pressable>
 
-            <Pressable onPress={Auth.signOut} style = {styles.button}>
-                <Text>Sign out</Text>
-            </Pressable>
+                <Pressable onPress={Auth.signOut} style = {styles.button}>
+                    <Text>Sign out</Text>
+                </Pressable>
+            </View>
+
 
             </View>
         </SafeAreaView>
@@ -86,8 +89,8 @@ const ProfileScreen = () => {
 const styles = StyleSheet.create({
     root: {
         width: '100%',
-        flex: 1,
-        padding: 10
+        padding: 10,
+        flex: 1
     },
     button: {
         backgroundColor: '#D6173c',
@@ -98,7 +101,8 @@ const styles = StyleSheet.create({
         margin: 10
     },
     container: {
-        padding: 10 
+        padding: 10,
+        flex: 1
     },
     option: {
         flexDirection: 'row',
@@ -108,6 +112,10 @@ const styles = StyleSheet.create({
     },
     checkbox: {
         justifyContent: 'flex-start'
+    },
+    bottom: {
+        justifyContent: 'flex-end',
+        flex: 1
     }
  }) 
 
