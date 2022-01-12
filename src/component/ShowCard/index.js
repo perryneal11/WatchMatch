@@ -2,13 +2,21 @@ import React from 'react';
 import {Text, View, ImageBackground, StyleSheet} from 'react-native';
 
 const Card = props => {
-  const {name, image, bio} = props.user;
+  const {title, url, description} = props.movie;
+  const image =  "https://image.tmdb.org/t/p/w300/" + props.image.toString()
+
+  console.log(image)
+  
+ 
+  //console.log(url)
+  //console.log(description)
+
   return (
     <View style={styles.card}>
       <ImageBackground source={{uri: image}} style={styles.image}>
         <View style={styles.cardInner}>
-          <Text style={styles.name}>{name}</Text>
-          <Text style={styles.description}>{bio}</Text>
+          <Text style={styles.name}>{title}</Text>
+          <Text style={styles.description}>{description}</Text>
         </View>
       </ImageBackground>
     </View>

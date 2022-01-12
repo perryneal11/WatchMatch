@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, useWindowDimensions, Image} from 'react-native';
 import Card from '../component/ShowCard/';
-import users from '../../assets/data/users.js';
+//import users from '../../assets/data/users.js';
 import AnimatedStack from '../component/AnimatedStack/';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -10,8 +10,11 @@ import TopRow from '../component/ButtonBars/topRow';
 
 const HomeScreen = () => {
 
-  const data = users
+  //const data = users
+  const [movieData, setMovieData] = React.useState('')
 
+
+  const fetchData = async () => {
    fetch("https://streaming-availability.p.rapidapi.com/search/basic?country=us&service=netflix&type=movie&output_language=en&language=en", {
     "method": "GET",
     "headers": {
@@ -20,10 +23,13 @@ const HomeScreen = () => {
     }
   })
   .then(response => response.json())
-  .then(data => movieData = data.results)
+  .then(data => {
+    console.log(data.results[0])
+    setMovieData(data.results)
+  })
   .catch(err => {
     console.error(err);
-  });
+  })}
 
   const onSwipeLeft = (user) => {
       console.log('LEFT')
@@ -32,15 +38,22 @@ const HomeScreen = () => {
     console.log('RIGHT')
   } 
 
+  useEffect(()=>{
+    fetchData()
+  }, [])
+  
+  console.log(movieData)
   return (
     <View style={styles.pageContainer}>
       <TopRow></TopRow>
-      <AnimatedStack
-      data={data}
-      renderItem = {({item}) => <Card user={item} />}
-      onSwipeLeft = {onSwipeLeft}
-      onSwipeRight = {onSwipeRight}>
-      </AnimatedStack>   
+            <AnimatedStack
+              data={movieData}
+              renderItem = {({item}) => <Card movie={item}image={item.backdropPath} />}
+              onSwipeLeft = {onSwipeLeft}
+              onSwipeRight = {onSwipeRight}>
+            </AnimatedStack>   
+    
+
     <View style= {styles.icons}>
       <View style = {styles.button}>
         <FontAwesome name="undo" size={30} color="#FBD88B" />

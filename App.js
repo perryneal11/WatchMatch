@@ -16,8 +16,6 @@ Amplify.configure({
   },
 });
 
-Amplify.Logger.LOG_LEVEL = "DEBUG";
-
 const App = () => {
 
   const Stack = createNativeStackNavigator();
