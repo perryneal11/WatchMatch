@@ -9,10 +9,21 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import TopRow from '../component/ButtonBars/topRow';
 import {User} from '../models'
 
+
+
+
 const HomeScreen = () => {
   const [movieData, setMovieData] = React.useState('')
   const [currentMovie, setCurrentMovie] = React.useState(null)
   const [user, setUser] = React.useState()
+
+  testData = 
+  [
+    {title: "movie",
+     backdropPath: "/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg",
+    overview: "This is an overview"}
+  ]
+  
 
   const fetchData = async () => {
    fetch("https://streaming-availability.p.rapidapi.com/search/basic?country=us&service=netflix&type=movie&output_language=en&language=en", {
@@ -24,10 +35,11 @@ const HomeScreen = () => {
   })
   .then(response => response.json())
   .then(data => {
-    setMovieData(data.results)
+    //setMovieData(data.results)
+
   })
   .catch(err => {
-    //console.error(err);
+    console.error(err);
   })}
 
   const getCurrentUser = async ()=> {
@@ -36,6 +48,11 @@ const HomeScreen = () => {
     const dbUser = dbUsers[0];
     setUser(dbUser)
     }
+
+  const filterMovieData = async (movieData) => {
+    const likedMovies = user.approvedContentIMDBID
+    setMovieData(movieData.filter(imdbID => !user.approvedContentIMDBID.includes(imdbID)))
+  }
 
   const save = async (newIMDBID, approved) => { 
     console.log('SAVING' , currentMovie.imdbID)
@@ -59,7 +76,6 @@ const HomeScreen = () => {
   }
 
   const onSwipeLeft = (currentMovie) => {
-      
       save(currentMovie.imdbID, true)
   } 
 
@@ -68,11 +84,13 @@ const HomeScreen = () => {
   } 
 
   useEffect(()=>{
-    fetchData()
+    //fetchData()
     getCurrentUser()
+    //filterMovieData(movieData)
+    setMovieData(testData)
   }, [])
   
-  //console.log(movieData)
+  console.log(movieData)
 
   return (
     <View style={styles.pageContainer}>
