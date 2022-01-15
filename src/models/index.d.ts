@@ -13,7 +13,7 @@ export declare class User {
   readonly Netflix?: boolean;
   readonly Prime?: boolean;
   readonly approvedContentIMDBID?: (string | null)[];
-  readonly unapprovedContentIMDB?: (string | null)[];
+  readonly unapprovedContentIMDBID?: (string | null)[];
   readonly friends?: (string | null)[];
   readonly username: string;
   readonly awsID: string;

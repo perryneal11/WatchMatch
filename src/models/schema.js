@@ -32,8 +32,8 @@ export const schema = {
                     "attributes": [],
                     "isArrayNullable": true
                 },
-                "unapprovedContentIMDB": {
-                    "name": "unapprovedContentIMDB",
+                "unapprovedContentIMDBID": {
+                    "name": "unapprovedContentIMDBID",
                     "isArray": true,
                     "type": "String",
                     "isRequired": false,
@@ -107,5 +107,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "19a7684f2a7e1c5f9ffd1bcfc7336693"
+    "version": "2fdad2e6c993657f83389d9e052a2cda"
 };

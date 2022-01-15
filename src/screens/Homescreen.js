@@ -37,22 +37,34 @@ const HomeScreen = () => {
     setUser(dbUser)
     }
 
-  const save = async (newIMDBID) => { 
+  const save = async (newIMDBID, approved) => { 
     console.log('SAVING' , currentMovie.imdbID)
     const updateUser = User.copyOf(user, updated => {
-      updated.approvedContentIMDBID.push(newIMDBID)
+      if(approved == true){ 
+        if(updated.approvedContentIMDBID == null){
+          updated.approvedContentIMDBID = [newIMDBID]
+        } else {
+          updated.approvedContentIMDBID.push(newIMDBID)
+        }
+      } else {
+        if(updated.unapprovedContentIMDBID == null){
+          updated.unapprovedContentIMDBID = [newIMDBID]
+        } else {
+          updated.unapprovedContentIMDBID.push(newIMDBID)
+        }
+      }
     })
     console.log(updateUser)
     await DataStore.save(updateUser)
   }
 
   const onSwipeLeft = (currentMovie) => {
-      console.log('LEFT' , currentMovie.imdbID)
-      save(currentMovie.imdbID)
+      
+      save(currentMovie.imdbID, true)
   } 
 
-  const onSwipeRight = (user) => {
-    
+  const onSwipeRight = (currentMovie) => {
+    save(currentMovie.imdbID, false)
   } 
 
   useEffect(()=>{
