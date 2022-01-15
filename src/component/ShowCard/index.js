@@ -5,9 +5,8 @@ const Card = props => {
   const {title, url, overview} = props.movie;
   const image =  "https://image.tmdb.org/t/p/w300/" + props.image.toString()
 
-  console.log(props.movie)
+  //console.log(props.movie)
   
-
   return (
     <View style={styles.card}>
       <ImageBackground source={{uri: image}} style={styles.image}>

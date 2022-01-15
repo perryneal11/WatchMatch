@@ -1,18 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Text, useWindowDimensions, Image} from 'react-native';
 import Card from '../component/ShowCard/';
-//import users from '../../assets/data/users.js';
 import AnimatedStack from '../component/AnimatedStack/';
+import {Auth, DataStore} from 'aws-amplify'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Entypo from 'react-native-vector-icons/Entypo';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import TopRow from '../component/ButtonBars/topRow';
+import {User} from '../models'
 
 const HomeScreen = () => {
-
-  //const data = users
   const [movieData, setMovieData] = React.useState('')
-
+  const [currentMovie, setCurrentMovie] = React.useState(null)
+  const [user, setUser] = React.useState()
 
   const fetchData = async () => {
    fetch("https://streaming-availability.p.rapidapi.com/search/basic?country=us&service=netflix&type=movie&output_language=en&language=en", {
@@ -24,35 +24,55 @@ const HomeScreen = () => {
   })
   .then(response => response.json())
   .then(data => {
-    console.log(data.results[0])
     setMovieData(data.results)
   })
   .catch(err => {
-    console.error(err);
+    //console.error(err);
   })}
 
-  const onSwipeLeft = (user) => {
-      console.log('LEFT')
+  const getCurrentUser = async ()=> {
+    const user = await Auth.currentAuthenticatedUser()
+    const dbUsers = await DataStore.query(User, u => u.awsID === user.attributes.sub)
+    const dbUser = dbUsers[0];
+    setUser(dbUser)
+    }
+
+  const save = async (newIMDBID) => { 
+    console.log('SAVING' , currentMovie.imdbID)
+    const updateUser = User.copyOf(user, updated => {
+      updated.approvedContentIMDBID.push(newIMDBID)
+    })
+    console.log(updateUser)
+    await DataStore.save(updateUser)
+  }
+
+  const onSwipeLeft = (currentMovie) => {
+      console.log('LEFT' , currentMovie.imdbID)
+      save(currentMovie.imdbID)
   } 
+
   const onSwipeRight = (user) => {
-    console.log('RIGHT')
+    
   } 
 
   useEffect(()=>{
     fetchData()
+    getCurrentUser()
   }, [])
   
-  console.log(movieData)
+  //console.log(movieData)
+
   return (
     <View style={styles.pageContainer}>
       <TopRow></TopRow>
+      {movieData ? (
             <AnimatedStack
               data={movieData}
               renderItem = {({item}) => <Card movie={item}image={item.backdropPath} />}
               onSwipeLeft = {onSwipeLeft}
-              onSwipeRight = {onSwipeRight}>
-            </AnimatedStack>   
-    
+              onSwipeRight = {onSwipeRight}
+              setCurrentMovie = {setCurrentMovie}>
+            </AnimatedStack>) : (<Text>No Movie Data</Text>)}
 
     <View style= {styles.icons}>
       <View style = {styles.button}>
@@ -97,7 +117,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 50,
   }
-
 });
 
 export default HomeScreen;
