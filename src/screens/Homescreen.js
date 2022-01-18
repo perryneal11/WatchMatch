@@ -14,6 +14,7 @@ import {User} from '../models'
 
 const HomeScreen = () => {
   const [movieData, setMovieData] = React.useState('')
+  const [filteredData, setFilteredData] = React.useState()
   const [currentMovie, setCurrentMovie] = React.useState(null)
   const [user, setUser] = React.useState()
 
@@ -21,7 +22,14 @@ const HomeScreen = () => {
   [
     {title: "movie",
      backdropPath: "/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg",
-    overview: "This is an overview"}
+    overview: "This is an overview",
+    imdbID: 'tt9850370'
+  },
+  {title: "movie2",
+  backdropPath: "/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg",
+ overview: "This is an overview",
+ imdbID: 'tt9850380'
+}
   ]
   
 
@@ -50,8 +58,11 @@ const HomeScreen = () => {
     }
 
   const filterMovieData = async (movieData) => {
+    console.log('here is movie data', movieData)
     const likedMovies = user.approvedContentIMDBID
-    setMovieData(movieData.filter(imdbID => !user.approvedContentIMDBID.includes(imdbID)))
+    console.log('liked movies from database', likedMovies)
+    setFilteredData(movieData.filter(item => !user.approvedContentIMDBID.includes(item.imdbID)))
+    console.log('we set filtered movie data to ', filteredData)
   }
 
   const save = async (newIMDBID, approved) => { 
@@ -71,7 +82,7 @@ const HomeScreen = () => {
         }
       }
     })
-    console.log(updateUser)
+    //console.log(updateUser)
     await DataStore.save(updateUser)
   }
 
@@ -86,11 +97,11 @@ const HomeScreen = () => {
   useEffect(()=>{
     //fetchData()
     getCurrentUser()
-    //filterMovieData(movieData)
+    console.log('user', user)
     setMovieData(testData)
+    filterMovieData(movieData)
   }, [])
   
-  console.log(movieData)
 
   return (
     <View style={styles.pageContainer}>
