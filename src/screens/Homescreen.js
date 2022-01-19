@@ -13,24 +13,24 @@ import {User} from '../models'
 
 
 const HomeScreen = () => {
-  const [movieData, setMovieData] = React.useState('')
-  const [filteredData, setFilteredData] = React.useState()
-  const [currentMovie, setCurrentMovie] = React.useState(null)
+  const [movieData, setMovieData] = React.useState()
+  const [filteredData, setFilteredData] = React.useState(movieData)
+  const [currentMovie, setCurrentMovie] = React.useState()
   const [user, setUser] = React.useState()
 
   testData = 
-  [
-    {title: "movie",
-     backdropPath: "/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg",
-    overview: "This is an overview",
-    imdbID: 'tt9850370'
+[
+  {title: "movie",
+  backdropPath: "/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg",
+  overview: "This is an overview",
+  imdbID: 'tt9850370'
   },
   {title: "movie2",
-  backdropPath: "/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg",
- overview: "This is an overview",
- imdbID: 'tt9850380'
-}
-  ]
+  backdropPath: "/a7f2CN7sBmFJJu5uO9BvDgqOEAc.jpg",
+  overview: "This is an overview",
+  imdbID: 'tt9850380'
+  }
+]
   
 
   const fetchData = async () => {
@@ -50,6 +50,7 @@ const HomeScreen = () => {
     console.error(err);
   })}
 
+
   const getCurrentUser = async ()=> {
     const user = await Auth.currentAuthenticatedUser()
     const dbUsers = await DataStore.query(User, u => u.awsID === user.attributes.sub)
@@ -58,12 +59,10 @@ const HomeScreen = () => {
     }
 
   const filterMovieData = async (movieData) => {
-    console.log('here is movie data', movieData)
     const likedMovies = user.approvedContentIMDBID
-    console.log('liked movies from database', likedMovies)
     setFilteredData(movieData.filter(item => !user.approvedContentIMDBID.includes(item.imdbID)))
-    console.log('we set filtered movie data to ', filteredData)
-  }
+    setMovieData(filteredData)
+  } 
 
   const save = async (newIMDBID, approved) => { 
     console.log('SAVING' , currentMovie.imdbID)
@@ -82,7 +81,6 @@ const HomeScreen = () => {
         }
       }
     })
-    //console.log(updateUser)
     await DataStore.save(updateUser)
   }
 
@@ -99,6 +97,7 @@ const HomeScreen = () => {
     getCurrentUser()
     console.log('user', user)
     setMovieData(testData)
+    console.log('movieData', movieData)
     filterMovieData(movieData)
   }, [])
   
@@ -115,23 +114,7 @@ const HomeScreen = () => {
               setCurrentMovie = {setCurrentMovie}>
             </AnimatedStack>) : (<Text>No Movie Data</Text>)}
 
-    <View style= {styles.icons}>
-      <View style = {styles.button}>
-        <FontAwesome name="undo" size={30} color="#FBD88B" />
-      </View>
-      <View style = {styles.button}>
-        <Entypo name="cross" size={30} color="#F76C6B" />
-      </View>
-      <View style = {styles.button}>
-        <FontAwesome name="star" size={30} color="#3AB4CC" />
-      </View>
-        <View style = {styles.button}>
-      <Ionicons name="flash" size={30} color="#A65CD2" />
-      </View>
-      <View style = {styles.button}>
-        <FontAwesome name="heart" size={30} color="#4FCC94" />
-      </View>
-      </View>
+    
     </View>
   );
 };
