@@ -40,7 +40,7 @@ const FindFriendsScreen = () => {
     const search = async () => {
         setIsLoading(true)
         console.log('query', query)
-        const potentialFriendsVar = await DataStore.query(User, u => u.username("eq", query.toLowerCase()) , {  
+        const potentialFriendsVar = await DataStore.query(User, u => u.username("contains", query.toLowerCase()) , {  
             page: 0,
             limit: 2})
             console.log(potentialFriendsVar)
@@ -95,6 +95,9 @@ const FindFriendsScreen = () => {
             <View style={styles.metaInfo}>
               <Text style={styles.title}>{item.username}</Text>
             </View>
+            <View>
+              <Button title= "Add"></Button>
+            </View>
           </View>
         )}
       />
@@ -125,6 +128,11 @@ const styles = StyleSheet.create({
         height: '100%',
         borderRadius: 50
         
+    },
+    listItem:{
+      borderColor: "black",
+      borderWidth: 3,
+      margin: 3
     }
 }) 
 
