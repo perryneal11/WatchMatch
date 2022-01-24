@@ -24,7 +24,7 @@ const App = () => {
     <NavigationContainer>
       <SafeAreaView style = {styles.root}>
       <View style={styles.pageContainer}>
-        <Stack.Navigator initialRouteName='Home'>
+        <Stack.Navigator initialRouteName='FindFriends'>
           <Stack.Screen name="Home" component = {HomeScreen} ></Stack.Screen>
           <Stack.Screen name="Matches" component = {MatchesScreen} options = {headerBackVisible = false}></Stack.Screen>
           <Stack.Screen name="FindFriends" component = {FindFriendsScreen} options = {headerBackVisible = false}></Stack.Screen>
