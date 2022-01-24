@@ -2,6 +2,7 @@ import React from 'react';
 import {View, StyleSheet, SafeAreaView, Pressable} from 'react-native';
 import HomeScreen from './src/screens/Homescreen.js';
 import ProfileScreen from './src/screens/ProfileScreen.js';
+import FindFriendsScreen from './src/screens/FindFriendsScreen.js';
 import { NavigationContainer, useLinkProps, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MatchesScreen from './src/screens/MatchesScreen.js';
@@ -26,6 +27,7 @@ const App = () => {
         <Stack.Navigator initialRouteName='Home'>
           <Stack.Screen name="Home" component = {HomeScreen} ></Stack.Screen>
           <Stack.Screen name="Matches" component = {MatchesScreen} options = {headerBackVisible = false}></Stack.Screen>
+          <Stack.Screen name="FindFriends" component = {FindFriendsScreen} options = {headerBackVisible = false}></Stack.Screen>
           <Stack.Screen name="Profile" component = {ProfileScreen} options = {headerBackVisible = false}></Stack.Screen>
         </Stack.Navigator>
       </View>

@@ -20,7 +20,7 @@ return <View style ={styles.topNavigation}>
 <Pressable onPress={() => {setActiveScreen('MATCHES'); navigation.navigate('Matches');}}>
   <Ionicons name="ios-chatbubbles" size = {24} color={activeScreen === 'MATCHES' ? activeIconColor : color}></Ionicons>
 </Pressable>
-<Pressable onPress={() => setActiveScreen('FRIENDS')}>
+<Pressable onPress={() => {setActiveScreen('FRIENDS'); navigation.navigate('FindFriends');}}>
   <MaterialCommunityIcons name="star-four-points" color={activeScreen === 'FRIENDS' ? activeIconColor : color} size = {24} ></MaterialCommunityIcons>
 </Pressable>
 <Pressable onPress={() => {setActiveScreen('PROFILE'); navigation.navigate('Profile');}}>
