@@ -99,7 +99,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.pageContainer}>
-      <TopRow activeScreen = {"HOME"}></TopRow>
+      <TopRow screen = 'HOME'></TopRow>
       {movieData ? (
             <AnimatedStack
               data={movieData}

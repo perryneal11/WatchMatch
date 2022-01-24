@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Pressable} from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import AntDesign from 'react-native-vector-icons/AntDesign'; 
@@ -6,25 +6,31 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome'; 
 import { useNavigation } from '@react-navigation/native';
  
-const TopRow  = () => {
+const TopRow  = props => {
     const [activeScreen, setActiveScreen] = React.useState()
+    const screen = props
     const color = "#b5b5b5"
     const activeIconColor = "red"
     const navigation = useNavigation();
 
 
+  useEffect(()=>{
+    setActiveScreen(props.screen)
+  }, [])
+
+
   return( 
   <View style ={styles.topNavigation}>
-    <Pressable onPress={() => {setActiveScreen('HOME'),navigation.navigate('Home') }}>
+    <Pressable onPress={() => navigation.navigate('Home')}>
       <MaterialCommunityIcons name="movie-open-outline" size = {24} color={activeScreen === 'HOME' ? activeIconColor : color}></MaterialCommunityIcons>
     </Pressable>
-    <Pressable onPress={() => {setActiveScreen('MATCHES'); navigation.navigate('Matches');}}>
+    <Pressable onPress={() =>  navigation.navigate('Matches')}>
       <Fontisto name="persons" size = {24} color={activeScreen === 'MATCHES' ? activeIconColor : color}></Fontisto>
     </Pressable>
-    <Pressable onPress={() => {setActiveScreen('FRIENDS'); navigation.navigate('FindFriends');}}>
+    <Pressable onPress={() =>  navigation.navigate('FindFriends')}>
       <AntDesign name="adduser" color={activeScreen === 'FRIENDS' ? activeIconColor : color} size = {24} ></AntDesign>
     </Pressable>
-    <Pressable onPress={() => {setActiveScreen('PROFILE'); navigation.navigate('Profile');}}>
+    <Pressable onPress={() =>  navigation.navigate('Profile')}>
     <FontAwesome name = "user" color={activeScreen === 'PROFILE' ? activeIconColor : color} size = {24}></FontAwesome>
     </Pressable>
   </View>

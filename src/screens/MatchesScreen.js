@@ -34,7 +34,7 @@ const MatchesScreen = () => {
 
     return(
         <SafeAreaView style = {styles.root}>
-            <TopRow></TopRow>
+            <TopRow screen = "MATCHES"></TopRow>
             <Text>Youre Friends</Text>
             <View style={users}>
                 {friends ? (

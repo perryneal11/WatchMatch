@@ -51,7 +51,7 @@ const ProfileScreen = () => {
     return(
         <SafeAreaView style = {styles.root}>
             <View style = {styles.container}>
-            <TopRow></TopRow>
+            <TopRow screen = "PROFILE"></TopRow>
             <Text> Streaming Services</Text>
             
             <Pressable style={styles.option}>

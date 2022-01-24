@@ -78,7 +78,7 @@ const FindFriendsScreen = () => {
       
     return(
         <SafeAreaView style = {styles.root}>
-            <TopRow></TopRow>
+            <TopRow screen = "FRIENDS"></TopRow>
             <Text>Find Friends</Text>
             <TextInput 
                 onChangeText={newQuery => setQuery(newQuery)}
