@@ -9,9 +9,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import TopRow from '../component/ButtonBars/topRow';
 import {User} from '../models'
 
-
-
-
 const HomeScreen = () => {
   const [movieData, setMovieData] = React.useState()
   const [filteredData, setFilteredData] = React.useState(movieData)
@@ -31,7 +28,6 @@ const HomeScreen = () => {
   imdbID: 'tt9850380'
   }
 ]
-  
 
   const fetchData = async () => {
    fetch("https://streaming-availability.p.rapidapi.com/search/basic?country=us&service=netflix&type=movie&output_language=en&language=en", {
@@ -50,18 +46,17 @@ const HomeScreen = () => {
     console.error(err);
   })}
 
-
   const getCurrentUser = async ()=> {
     const user = await Auth.currentAuthenticatedUser()
     const dbUsers = await DataStore.query(User, u => u.awsID === user.attributes.sub)
     const dbUser = dbUsers[0];
-    setUser(dbUser)
+    return setUser(dbUser)
     }
 
   const filterMovieData = async (movieData) => {
     const likedMovies = user.approvedContentIMDBID
     setFilteredData(movieData.filter(item => !user.approvedContentIMDBID.includes(item.imdbID)))
-    setMovieData(filteredData)
+    return setMovieData(filteredData)
   } 
 
   const save = async (newIMDBID, approved) => { 
@@ -114,7 +109,6 @@ const HomeScreen = () => {
               setCurrentMovie = {setCurrentMovie}>
             </AnimatedStack>) : (<Text>No Movie Data</Text>)}
 
-    
     </View>
   );
 };

@@ -14,14 +14,14 @@ const ProfileScreen = () => {
         const getCurrentUser = async ()=> {
             const user = await Auth.currentAuthenticatedUser()
             const dbUsers = await DataStore.query(User, u => u.awsID === user.attributes.sub)
-        if(dbUsers.length < 0) {
-            return;
+                if(dbUsers.length < 0) {
+                    return;
+                }
+            const dbUser = dbUsers[0];
+            setUser(dbUser)
+            setNetflix(dbUser.Netflix)
+            setPrime(dbUser.Prime)
         }
-        const dbUser = dbUsers[0];
-        setUser(dbUser)
-        setNetflix(dbUser.Netflix)
-        setPrime(dbUser.Prime)
-    }
         getCurrentUser();
 
     },[])
