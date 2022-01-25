@@ -25,7 +25,6 @@ const FindFriendsScreen = () => {
     const getFriendsList = async () => {
         const friendsList = user.friends
         const friendsFromDb = await DataStore.query(User, u => u.awsID in friendsList)
-        console.log('friends from db', friendsFromDb)
         return setFriends(friendsFromDb)
         } 
 
@@ -34,12 +33,10 @@ const FindFriendsScreen = () => {
             page: 0,
             limit: 2})
         return setPotentialFriends(potentialFriendsVar)
-
     }    
 
     const search = async () => {
         setIsLoading(true)
-        console.log('query', query)
         const potentialFriendsVar = await DataStore.query(User, u => u.username("contains", query.toLowerCase()) , {  
             page: 0,
             limit: 2})
@@ -47,13 +44,15 @@ const FindFriendsScreen = () => {
         setIsLoading(false)
         return setPotentialFriends(potentialFriendsVar)
     }    
+
+    const sendFriendRequest = async () => {
+      
+    }
     
     useEffect(()=> {
         setIsLoading(false)
         getCurrentUser()
         getPotentialFriends()
-        console.log('potential friends', potentialFriends)
-
     }, [])
 
     if (isLoading) {
@@ -77,7 +76,10 @@ const FindFriendsScreen = () => {
           
       
     return(
+            
         <SafeAreaView style = {styles.root}>
+          {console.log("user", user),
+           console.log('potential friends Varf', potentialFriends)}
             <TopRow screen = "FRIENDS"></TopRow>
             <Text>Find Friends</Text>
             <TextInput 
@@ -96,7 +98,7 @@ const FindFriendsScreen = () => {
               <Text style={styles.title}>{item.username}</Text>
             </View>
             <View>
-              <Button title= "Add"></Button>
+              <Button title= "Add" onPress={() => sendFriendRequest(item.awsID) }   ></Button>
             </View>
           </View>
         )}

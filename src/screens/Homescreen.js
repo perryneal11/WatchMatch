@@ -55,8 +55,12 @@ const HomeScreen = () => {
 
   const filterMovieData = async (movieData) => {
     const likedMovies = user.approvedContentIMDBID
-    setFilteredData(movieData.filter(item => !user.approvedContentIMDBID.includes(item.imdbID)))
-    return setMovieData(filteredData)
+    if(likedMovies != null){
+      setFilteredData(movieData.filter(item => !user.approvedContentIMDBID.includes(item.imdbID)))
+      return setMovieData(filteredData)
+    }
+    else return 
+
   } 
 
   const save = async (newIMDBID, approved) => { 
@@ -90,9 +94,7 @@ const HomeScreen = () => {
   useEffect(()=>{
     //fetchData()
     getCurrentUser()
-    console.log('user', user)
     setMovieData(testData)
-    console.log('movieData', movieData)
     filterMovieData(movieData)
   }, [])
   

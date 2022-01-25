@@ -20,16 +20,17 @@ const MatchesScreen = () => {
     
     const getFriendsList = async () => {
         const friendsList = user.friends
-        const friendsFromDb = await DataStore.query(User, u => u.awsID in friendsList)
-        console.log('friends from db', friendsFromDb)
-        return setFriends(friendsFromDb)
+        if(friendsList != null){
+            const friendsFromDb = await DataStore.query(User, u => u.awsID in friendsList)
+            console.log('friends from db', friendsFromDb)
+            return setFriends(friendsFromDb)
         } 
+        else return 
+    }
     
     useEffect(()=> {
         getCurrentUser()
-        console.log('user', user)
         getFriendsList()
-        console.log('friends list' , friends)
     }, [])
 
     return(

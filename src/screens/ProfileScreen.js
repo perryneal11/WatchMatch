@@ -52,8 +52,8 @@ const ProfileScreen = () => {
         <SafeAreaView style = {styles.root}>
             <View style = {styles.container}>
             <TopRow screen = "PROFILE"></TopRow>
+            <Text> {user.username}</Text>
             <Text> Streaming Services</Text>
-            
             <Pressable style={styles.option}>
             <BouncyCheckbox 
                 text="Netflix"
