@@ -17,6 +17,7 @@ export declare class User {
   readonly friends?: (string | null)[];
   readonly username: string;
   readonly awsID: string;
+  readonly friendRequest?: (string | null)[];
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<User, UserMetaData>);

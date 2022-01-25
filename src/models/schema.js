@@ -62,6 +62,14 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
+                "friendRequest": {
+                    "name": "friendRequest",
+                    "isArray": true,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isArrayNullable": true
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -107,5 +115,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "2fdad2e6c993657f83389d9e052a2cda"
+    "version": "a1884ae05cf5c61bc877dc6ac0d00612"
 };

@@ -7,5 +7,6 @@ type User @model @auth(rules: [{allow: public}]) {
   friends: [String]
   username: String!
   awsID: String!
+  friendRequest: [String]
 }
  
