@@ -101,7 +101,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.pageContainer}>
-      <TopRow screen = 'HOME'></TopRow>
+
       {movieData ? (
             <AnimatedStack
               data={movieData}
@@ -110,7 +110,7 @@ const HomeScreen = () => {
               onSwipeRight = {onSwipeRight}
               setCurrentMovie = {setCurrentMovie}>
             </AnimatedStack>) : (<Text>No Movie Data</Text>)}
-
+            <TopRow screen = 'HOME'></TopRow>
     </View>
   );
 };

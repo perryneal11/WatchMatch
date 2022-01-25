@@ -1,3 +1,9 @@
+type Friendship @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  requestAccepted: Boolean
+  Users: [User] @hasMany(indexName: "byFriendship", fields: ["id"])
+}
+
 type User @model @auth(rules: [{allow: public}]) {
   id: ID!
   Netflix: Boolean
@@ -7,6 +13,6 @@ type User @model @auth(rules: [{allow: public}]) {
   friends: [String]
   username: String!
   awsID: String!
-  friendRequest: [String]
+  friendshipID: ID! @index(name: "byFriendship")
 }
  

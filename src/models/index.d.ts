@@ -4,8 +4,22 @@ import { ModelInit, MutableModel, PersistentModelConstructor } from "@aws-amplif
 
 
 
+type FriendshipMetaData = {
+  readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
 type UserMetaData = {
   readOnlyFields: 'createdAt' | 'updatedAt';
+}
+
+export declare class Friendship {
+  readonly id: string;
+  readonly requestAccepted?: boolean;
+  readonly Users?: (User | null)[];
+  readonly createdAt?: string;
+  readonly updatedAt?: string;
+  constructor(init: ModelInit<Friendship, FriendshipMetaData>);
+  static copyOf(source: Friendship, mutator: (draft: MutableModel<Friendship, FriendshipMetaData>) => MutableModel<Friendship, FriendshipMetaData> | void): Friendship;
 }
 
 export declare class User {
@@ -17,7 +31,7 @@ export declare class User {
   readonly friends?: (string | null)[];
   readonly username: string;
   readonly awsID: string;
-  readonly friendRequest?: (string | null)[];
+  readonly friendshipID: string;
   readonly createdAt?: string;
   readonly updatedAt?: string;
   constructor(init: ModelInit<User, UserMetaData>);

@@ -13,11 +13,9 @@ const TopRow  = props => {
     const activeIconColor = "red"
     const navigation = useNavigation();
 
-
   useEffect(()=>{
     setActiveScreen(props.screen)
   }, [])
-
 
   return( 
   <View style ={styles.topNavigation}>

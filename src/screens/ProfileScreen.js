@@ -6,7 +6,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {User} from '../models'
 
 const ProfileScreen = () => {
-    const [user, setUser] = useState(null)
+    const [user, setUser] = useState()
     const [netflix, setNetflix] = useState(true)
     const [prime, setPrime] = useState(true)
 
@@ -50,9 +50,10 @@ const ProfileScreen = () => {
     
     return(
         <SafeAreaView style = {styles.root}>
+            {console.log("hello", user)}
             <View style = {styles.container}>
-            <TopRow screen = "PROFILE"></TopRow>
-            <Text> {user.username}</Text>
+
+            <Text> </Text>
             <Text> Streaming Services</Text>
             <Pressable style={styles.option}>
             <BouncyCheckbox 
@@ -82,6 +83,7 @@ const ProfileScreen = () => {
 
 
             </View>
+            <TopRow screen = "PROFILE"></TopRow>
         </SafeAreaView>
     )
 };

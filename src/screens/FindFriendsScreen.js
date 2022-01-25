@@ -80,7 +80,7 @@ const FindFriendsScreen = () => {
         <SafeAreaView style = {styles.root}>
           {console.log("user", user),
            console.log('potential friends Varf', potentialFriends)}
-            <TopRow screen = "FRIENDS"></TopRow>
+ 
             <Text>Find Friends</Text>
             <TextInput 
                 onChangeText={newQuery => setQuery(newQuery)}
@@ -103,13 +103,14 @@ const FindFriendsScreen = () => {
           </View>
         )}
       />
+                 <TopRow screen = "FRIENDS"></TopRow>
         </SafeAreaView>
     )}}
 
 const styles = StyleSheet.create({
     root: {
         width: '100%',
-        flex: 1,
+        flex: 3,
         padding: 10
     },
     users:{

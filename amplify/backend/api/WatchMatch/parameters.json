@@ -2,10 +2,5 @@
   "AppSyncApiName": "WatchMatch",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthCognitoUserPoolId": {
-    "Fn::GetAtt": [
-      "authWatchMatch",
-      "Outputs.UserPoolId"
-    ]
-  }
+  "AuthModeLastUpdated": "2022-01-25T22:34:45.593Z"
 }

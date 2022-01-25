@@ -35,16 +35,17 @@ const MatchesScreen = () => {
 
     return(
         <SafeAreaView style = {styles.root}>
-            <TopRow screen = "MATCHES"></TopRow>
+
             <Text>Youre Friends</Text>
-            <View style={users}>
+            <View style={styles.users}>
                 {friends ? (
                     friends.map(friend => (
-                        <View style = {styles.user}>
+                        <View>
                         <Text>{friend.username}</Text>
                         </View>
-                    ))) : (<Text>No Friends</Text>)}
+                    ))) : (<Text style ={users}>No Friends</Text>)}
             </View>
+            <TopRow screen = "MATCHES"></TopRow>
         </SafeAreaView>
     )}
 
@@ -56,7 +57,8 @@ const styles = StyleSheet.create({
     },
     users:{
         flexDirection: 'row',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        flex: 2
     },
     user: {
         width: 100,
