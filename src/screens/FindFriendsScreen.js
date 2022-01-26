@@ -37,12 +37,20 @@ const FindFriendsScreen = () => {
 
     const search = async () => {
         setIsLoading(true)
+        console.log("query", query)
         const potentialFriendsVar = await DataStore.query(User, u => u.username("contains", query.toLowerCase()) , {  
-            page: 0,
-            limit: 2})
+            page: 1,
+            limit: 10})
             console.log(potentialFriendsVar)
-        setIsLoading(false)
-        return setPotentialFriends(potentialFriendsVar)
+        
+        if (potentialFriendsVar.length > 0){
+          setIsLoading(false)
+          return setPotentialFriends(potentialFriendsVar)
+        } else {
+          setIsLoading(false)
+          return 
+        }
+        
     }    
 
     const sendFriendRequest = async () => {
@@ -92,8 +100,7 @@ const FindFriendsScreen = () => {
                 keyExtractor={item => item.first}
                 renderItem={({ item }) => (
           <View style={styles.listItem}>
-            <Image
-            />
+            <Image key = {item.awsID}/>
             <View style={styles.metaInfo}>
               <Text style={styles.title}>{item.username}</Text>
             </View>

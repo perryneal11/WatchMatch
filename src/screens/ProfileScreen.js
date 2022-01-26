@@ -6,7 +6,7 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {User} from '../models'
 
 const ProfileScreen = () => {
-    const [user, setUser] = useState()
+    const [user, setUser] = useState({})
     const [netflix, setNetflix] = useState(true)
     const [prime, setPrime] = useState(true)
 
