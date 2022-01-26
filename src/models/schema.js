@@ -139,7 +139,7 @@ export const schema = {
                     "name": "friendshipID",
                     "isArray": false,
                     "type": "ID",
-                    "isRequired": true,
+                    "isRequired": false,
                     "attributes": []
                 },
                 "createdAt": {
@@ -196,5 +196,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "39de822395c653145f4d8984d9a1e9d9"
+    "version": "e90dc51fb0422afd90701e1560d30632"
 };

@@ -43,7 +43,7 @@ const MatchesScreen = () => {
                         <View>
                         <Text>{friend.username}</Text>
                         </View>
-                    ))) : (<Text style ={users}>No Friends</Text>)}
+                    ))) : (<Text style ={styles.users}>No Friends</Text>)}
             </View>
             <TopRow screen = "MATCHES"></TopRow>
         </SafeAreaView>

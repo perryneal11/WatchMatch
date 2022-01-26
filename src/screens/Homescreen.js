@@ -13,7 +13,7 @@ const HomeScreen = () => {
   const [movieData, setMovieData] = React.useState()
   const [filteredData, setFilteredData] = React.useState(movieData)
   const [currentMovie, setCurrentMovie] = React.useState()
-  const [user, setUser] = React.useState()
+  const [user, setUser] = React.useState({})
 
   testData = 
 [
@@ -50,17 +50,20 @@ const HomeScreen = () => {
     const user = await Auth.currentAuthenticatedUser()
     const dbUsers = await DataStore.query(User, u => u.awsID === user.attributes.sub)
     const dbUser = dbUsers[0];
+    console.log("help", user)
     return setUser(dbUser)
     }
 
   const filterMovieData = async (movieData) => {
+    if (user){
     const likedMovies = user.approvedContentIMDBID
     if(likedMovies != null){
       setFilteredData(movieData.filter(item => !user.approvedContentIMDBID.includes(item.imdbID)))
       return setMovieData(filteredData)
     }
     else return 
-
+  }
+  else console.log(user)
   } 
 
   const save = async (newIMDBID, approved) => { 

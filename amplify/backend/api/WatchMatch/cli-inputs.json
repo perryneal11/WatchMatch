@@ -3,7 +3,7 @@
   "serviceConfiguration": {
     "apiName": "WatchMatch",
     "serviceName": "AppSync",
-    "gqlSchemaPath": "/tmp/amplify-c915acba-01b2-4ac9-ad16-ed5f0b56218e/amplify/backend/api/WatchMatch/schema.graphql",
+    "gqlSchemaPath": "/tmp/amplify-4f2e5100-48ba-40d0-9e54-b3beab988fea/amplify/backend/api/WatchMatch/schema.graphql",
     "defaultAuthType": {
       "mode": "API_KEY",
       "keyDescription": "api key description",
