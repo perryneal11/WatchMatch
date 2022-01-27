@@ -111,7 +111,7 @@ const HomeScreen = () => {
     getCurrentUser()
     filterMovieData(movieData)
     setIsLoading(false)
-  },)
+  },[])
   
 
   return (

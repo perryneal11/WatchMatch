@@ -97,10 +97,12 @@ const FindFriendsScreen = () => {
             <Button title="Search" onPress={() => search(query)}></Button>
             <FlatList
                 data={potentialFriends}
-                keyExtractor={item => item.first}
+                keyExtractor={(item, index) => {
+                  return item.id;
+                }}
                 renderItem={({ item }) => (
           <View style={styles.listItem}>
-            <Image key = {item.awsID}/>
+            <Image/>
             <View style={styles.metaInfo}>
               <Text style={styles.title}>{item.username}</Text>
             </View>
