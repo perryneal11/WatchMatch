@@ -1,9 +1,9 @@
 import React, { useState }  from "react";
-import {View, Text, SafeAreaView, StyleSheet, ActivityIndicator, FlatList, Button, Image} from 'react-native';
+import {View, Text, SafeAreaView, StyleSheet, ActivityIndicator, FlatList, Button, Image, Alert} from 'react-native';
 import TopRow from "../component/ButtonBars/topRow";
 import {Auth, DataStore, Predicates} from 'aws-amplify'
 import { useEffect } from "react/cjs/react.development";
-import {User} from '../models'
+import {FriendshipUser, User, Friendship} from '../models'
 import { TextInput } from "react-native-gesture-handler";
 
 const FindFriendsScreen = () => {
@@ -14,12 +14,14 @@ const FindFriendsScreen = () => {
     const [error, setError] = useState(null)
     const [potentialFriends, setPotentialFriends] = useState([])
     const [query, setQuery] = useState(null)
+    const [friendRequests, setFriendRequests] = useState([])
 
     const getCurrentUser = async ()=> {
-        const user = await Auth.currentAuthenticatedUser()
-        const dbUsers = await DataStore.query(User, u => u.awsID === user.attributes.sub)
-        const dbUser = dbUsers[0]
-        return setUser(dbUser)
+      const userVar = await Auth.currentAuthenticatedUser()
+      const dbUsers = await DataStore.query(User, u => u.awsID("eq", userVar.attributes.sub))
+      const dbUser = dbUsers[0];
+      return setUser(dbUser)
+
         }
     
     const getFriendsList = async () => {
@@ -53,14 +55,46 @@ const FindFriendsScreen = () => {
         
     }    
 
-    const sendFriendRequest = async () => {
+    const sendFriendRequest = async (receiver) => {
+      // first you save the friendship for the current user 
+      const friendship = await DataStore.save(
+        new Friendship({
+          requestAccepted: false,
+        })
+      );
       
+
+      // then you save the link to friendship for current user
+    await DataStore.save(
+      new FriendshipUser({
+        user: user,
+        friendship: friendship
+      })
+    );
+    
+    //and finally, the reciever
+    await DataStore.save(
+      new FriendshipUser({
+        user: receiver,
+        friendship: friendship
+      })
+    ); 
+
+    Alert.alert("Friend Request Sent")
+
+    //TODO: Make add button disabled for this user
+
+    }
+
+    const getfriendRequests = async () => {
+
     }
     
     useEffect(()=> {
         setIsLoading(false)
         getCurrentUser()
         getPotentialFriends()
+        getfriendRequests()
     }, [])
 
     if (isLoading) {
@@ -86,9 +120,20 @@ const FindFriendsScreen = () => {
     return(
             
         <SafeAreaView style = {styles.root}>
-          {console.log("user", user),
-           console.log('potential friends Varf', potentialFriends)}
- 
+            <Text>Friend Requests</Text>
+            <FlatList
+                data={friendRequests}
+                keyExtractor={(item, index) => {
+                  return item.id;
+                }}
+                renderItem={({ item }) => (
+            <View style={styles.friendRequests}>
+            <Text style={styles.title}>{item}</Text>
+            <View>
+              <Button title= "Accept" onPress={() => acceptFriendRequest() }></Button>
+            </View>
+          </View>
+        )}/>
             <Text>Find Friends</Text>
             <TextInput 
                 onChangeText={newQuery => setQuery(newQuery)}
@@ -104,10 +149,10 @@ const FindFriendsScreen = () => {
           <View style={styles.listItem}>
             <Image/>
             <View style={styles.metaInfo}>
-              <Text style={styles.title}>{item.username}</Text>
+              <Text style={styles.title}>{item.username}{item.awsID}</Text>
             </View>
             <View>
-              <Button title= "Add" onPress={() => sendFriendRequest(item.awsID) }   ></Button>
+              <Button title= "Add" onPress={() => sendFriendRequest(item) }   ></Button>
             </View>
           </View>
         )}
