@@ -53,6 +53,10 @@ const MatchesScreen = () => {
   };
 
   useEffect(() => {
+    getFriendsList();
+  }, [user]);
+
+  useEffect(() => {
     getCurrentUser();
     getFriendsList();
   }, []);
