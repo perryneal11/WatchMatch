@@ -21,10 +21,15 @@ const MatchesScreen = () => {
     const getFriendsList = async () => {
         
         const usersFriendships = (await DataStore.query(FriendshipUser)).filter( fu => fu.user.id == user.id).map(fu => fu.friendship.id)
-        console.log("users friendships", usersFriendships)
+        //console.log("users friendships", usersFriendships)
         const usersLinkedToSameFriendship = (await DataStore.query(FriendshipUser)).filter(fu => usersFriendships.includes(fu.friendship.id) && fu.user.username != user.username).map(fu=> fu.user)
-        console.log("users with same friendships",usersLinkedToSameFriendship )
-        setFriends(usersLinkedToSameFriendship)
+        //console.log("users with same friendships",usersLinkedToSameFriendship )
+        //remove duplicates from friends
+        const friendsToShow = Array.from(new Set(usersLinkedToSameFriendship.map(u => u.id)))
+        .map(id => {
+          return usersLinkedToSameFriendship.find(f => f.id === id)
+        })
+        setFriends(friendsToShow)
     
     }
     
