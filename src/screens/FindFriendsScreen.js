@@ -52,6 +52,7 @@ const FindFriendsScreen = () => {
           setIsLoading(false)
           return 
         }
+        //TODO: filter out already friends 
         
     }    
 
@@ -86,8 +87,31 @@ const FindFriendsScreen = () => {
 
     }
 
-    const getfriendRequests = async () => {
+    const acceptFriendRequest = async (id) => {
 
+      const friendshipByFriendshipUserLinkId = (await DataStore.query(FriendshipUser)).filter(
+        fu => fu.id === id
+    ).map(f => f.friendship);
+    
+    console.log("friendshipByFriendshipUserLinkId", friendshipByFriendshipUserLinkId[0])
+
+      await DataStore.save(
+        Friendship.copyOf(friendshipByFriendshipUserLinkId[0], updated => {
+          updated.requestAccepted = true;
+        })
+      );
+
+
+
+    }
+
+    const getfriendRequests = async () => {
+      //first we get the un accepted friend requests.
+      const usersFriendships = (await DataStore.query(FriendshipUser)).filter( fu => fu.user.id == user.id).map(fu => fu.friendship).filter(f => !f.requestAccepted).map(f => f.id)
+      //console.log("users friendships", usersFriendships)
+      const usersLinkedToSameFriendship = (await DataStore.query(FriendshipUser)).filter(fu => usersFriendships.includes(fu.friendship.id) && fu.user.username != user.username)
+      //console.log("users with same friendships",usersLinkedToSameFriendship )
+      return setFriendRequests(usersLinkedToSameFriendship)
     }
     
     useEffect(()=> {
@@ -128,9 +152,9 @@ const FindFriendsScreen = () => {
                 }}
                 renderItem={({ item }) => (
             <View style={styles.friendRequests}>
-            <Text style={styles.title}>{item}</Text>
+            <Text style={styles.title}>{item.user.username}</Text>
             <View>
-              <Button title= "Accept" onPress={() => acceptFriendRequest() }></Button>
+              <Button title= "Accept" onPress={() => acceptFriendRequest(item.id) }></Button>
             </View>
           </View>
         )}/>
