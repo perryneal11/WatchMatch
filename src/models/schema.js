@@ -21,14 +21,14 @@ export const schema = {
                     "name": "Users",
                     "isArray": true,
                     "type": {
-                        "model": "User"
+                        "model": "FriendshipUser"
                     },
                     "isRequired": false,
                     "attributes": [],
                     "isArrayNullable": true,
                     "association": {
                         "connectionType": "HAS_MANY",
-                        "associatedWith": "friendshipID"
+                        "associatedWith": "friendship"
                     }
                 },
                 "createdAt": {
@@ -135,12 +135,19 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "friendshipID": {
-                    "name": "friendshipID",
-                    "isArray": false,
-                    "type": "ID",
+                "friendships": {
+                    "name": "friendships",
+                    "isArray": true,
+                    "type": {
+                        "model": "FriendshipUser"
+                    },
                     "isRequired": false,
-                    "attributes": []
+                    "attributes": [],
+                    "isArrayNullable": true,
+                    "association": {
+                        "connectionType": "HAS_MANY",
+                        "associatedWith": "user"
+                    }
                 },
                 "createdAt": {
                     "name": "createdAt",
@@ -167,15 +174,6 @@ export const schema = {
                     "properties": {}
                 },
                 {
-                    "type": "key",
-                    "properties": {
-                        "name": "byFriendship",
-                        "fields": [
-                            "friendshipID"
-                        ]
-                    }
-                },
-                {
                     "type": "auth",
                     "properties": {
                         "rules": [
@@ -192,9 +190,71 @@ export const schema = {
                     }
                 }
             ]
+        },
+        "FriendshipUser": {
+            "name": "FriendshipUser",
+            "fields": {
+                "id": {
+                    "name": "id",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "friendship": {
+                    "name": "friendship",
+                    "isArray": false,
+                    "type": {
+                        "model": "Friendship"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "friendshipID"
+                    }
+                },
+                "user": {
+                    "name": "user",
+                    "isArray": false,
+                    "type": {
+                        "model": "User"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "BELONGS_TO",
+                        "targetName": "userID"
+                    }
+                },
+                "createdAt": {
+                    "name": "createdAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                },
+                "updatedAt": {
+                    "name": "updatedAt",
+                    "isArray": false,
+                    "type": "AWSDateTime",
+                    "isRequired": false,
+                    "attributes": [],
+                    "isReadOnly": true
+                }
+            },
+            "syncable": true,
+            "pluralName": "FriendshipUsers",
+            "attributes": [
+                {
+                    "type": "model",
+                    "properties": {}
+                }
+            ]
         }
     },
     "enums": {},
     "nonModels": {},
-    "version": "e90dc51fb0422afd90701e1560d30632"
+    "version": "8c0169d2c22a3e2765adf09ef63ff425"
 };

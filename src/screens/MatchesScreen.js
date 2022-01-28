@@ -1,10 +1,10 @@
-import React, { useState, Component }  from "react";
+import React, { useState }  from "react";
 import {View, Text, SafeAreaView, StyleSheet, Image} from 'react-native';
-import users from '../../assets/data/users'
 import TopRow from "../component/ButtonBars/topRow";
-import {Auth, DataStore} from 'aws-amplify'
+import {Auth, DataStore, Predicates} from 'aws-amplify'
 import { useEffect } from "react/cjs/react.development";
-import {User} from '../models'
+import {Friendship, FriendshipUser, User} from '../models'
+import { PredicateAll } from "@aws-amplify/datastore/lib-esm/predicates";
 
 const MatchesScreen = () => {
 
@@ -12,20 +12,20 @@ const MatchesScreen = () => {
     const [friends, setFriends] = useState();
 
     const getCurrentUser = async ()=> {
-        const user = await Auth.currentAuthenticatedUser()
-        const dbUsers = await DataStore.query(User, u => u.awsID === user.attributes.sub)
-        const dbUser = dbUsers[0]
+        const userVar = await Auth.currentAuthenticatedUser()
+        const dbUsers = await DataStore.query(User, u => u.awsID("eq", userVar.attributes.sub))
+        const dbUser = dbUsers[0];
         return setUser(dbUser)
         }
     
     const getFriendsList = async () => {
-        const friendsList = user.friends
-        if(friendsList != null){
-            const friendsFromDb = await DataStore.query(User, u => u.awsID in friendsList)
-            console.log('friends from db', friendsFromDb)
-            return setFriends(friendsFromDb)
-        } 
-        else return 
+        
+        const usersFriendships = (await DataStore.query(FriendshipUser)).filter( fu => fu.user.id == user.id).map(fu => fu.friendship.id)
+        console.log("users friendships", usersFriendships)
+        const usersLinkedToSameFriendship = (await DataStore.query(FriendshipUser)).filter(fu => usersFriendships.includes(fu.friendship.id) && fu.user.username != user.username).map(fu=> fu.user)
+        console.log("users with same friendships",usersLinkedToSameFriendship )
+        setFriends(usersLinkedToSameFriendship)
+    
     }
     
     useEffect(()=> {
@@ -40,7 +40,7 @@ const MatchesScreen = () => {
             <View style={styles.users}>
                 {friends ? (
                     friends.map(friend => (
-                        <View>
+                        <View key={friend.id}>
                         <Text>{friend.username}</Text>
                         </View>
                     ))) : (<Text style ={styles.users}>No Friends</Text>)}
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     users:{
         flexDirection: 'row',
         flexWrap: 'wrap',
-        flex: 2
+        flex: 1
     },
     user: {
         width: 100,

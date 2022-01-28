@@ -1,7 +1,7 @@
 type Friendship @model @auth(rules: [{allow: public}]) {
   id: ID!
   requestAccepted: Boolean
-  Users: [User] @hasMany(indexName: "byFriendship", fields: ["id"])
+  Users: [User] @manyToMany(relationName: "FriendshipUser")
 }
 
 type User @model @auth(rules: [{allow: public}]) {
@@ -13,6 +13,6 @@ type User @model @auth(rules: [{allow: public}]) {
   friends: [String]
   username: String!
   awsID: String!
-  friendshipID: ID @index(name: "byFriendship")
+  friendships: [Friendship] @manyToMany(relationName: "FriendshipUser")
 }
  
