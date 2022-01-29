@@ -15,7 +15,7 @@ import {Friendship, FriendshipUser, User} from '../models';
 
 const MatchesScreen = () => {
   const [user, setUser] = useState({});
-  const [friends, setFriends] = useState();
+  const [friends, setFriends] = useState([]);
 
   const getCurrentUser = async () => {
     const userVar = await Auth.currentAuthenticatedUser();
@@ -36,13 +36,14 @@ const MatchesScreen = () => {
         f.friendshipSenderId('eq', user.id).friendshipReceiverId('eq', user.id),
       ),
     );
-    const receviers = usersFriendships.map(f => f.Receiver);
+        
+    const receivers = usersFriendships.map(f => f.Receiver );
     const senders = usersFriendships.map(f => f.Sender);
-    const friends = receviers.concat(senders).filter(u => u.id != user.id);
+    console.log("rec",usersFriendships)
+    const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
-    console.log('wtf', friends);
-
-    setFriends(friendsNoDuplicates);
+    console.log('wtf', friendsNoDuplicates);
+    return setFriends(friendsNoDuplicates);
   };
 
   useEffect(() => {
@@ -58,11 +59,11 @@ const MatchesScreen = () => {
     <SafeAreaView style={styles.root}>
       <Text>Youre Friends</Text>
 
-      <FlatList
+      {friends? (<FlatList
         data={friends}
         keyExtractor={(item, index) => {
           return item.id;
-        }}
+        }} 
         renderItem={({item}) => (
           <View style={styles.listItem}>
             <Image />
@@ -79,7 +80,9 @@ const MatchesScreen = () => {
             </View>
           </View>
         )}
-      />
+      />):(<Text>No friends</Text>)}
+
+      
       <TopRow screen="MATCHES"></TopRow>
     </SafeAreaView>
   );
