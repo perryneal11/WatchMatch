@@ -35,15 +35,6 @@ const FindFriendsScreen = () => {
     return setUser(dbUser);
   };
 
-  const getFriendsList = async () => {
-    const friendsList = user.friends;
-    const friendsFromDb = await DataStore.query(
-      User,
-      u => u.awsID in friendsList,
-    );
-    return setFriends(friendsFromDb);
-  };
-
   const search = async () => {
     setIsLoading(true);
     console.log('query', query);
@@ -72,67 +63,36 @@ const FindFriendsScreen = () => {
     const friendship = await DataStore.save(
       new Friendship({
         requestAccepted: false,
+        Sender: user,
+        Recevier: receiver,
+        friendshipReceiverId: receiver.id,
+        friendshipSenderId: user.id
       }),
       setPotentialFriends([]),
-    );
-
-    // then you save the link to friendship for current user
-    await DataStore.save(
-      new FriendshipUser({
-        user: user,
-        friendship: friendship,
-      }),
-    );
-
-    //and finally, the reciever
-    await DataStore.save(
-      new FriendshipUser({
-        user: receiver,
-        friendship: friendship,
-      }),
     );
 
     Alert.alert('Friend Request Sent');
 
     //TODO: Make add button disabled for this user
   };
+  
+  const acceptFriendRequest = async friendRequest => {
 
-  const acceptFriendRequest = async id => {
-    const friendshipByFriendshipUserLinkId = (
-      await DataStore.query(FriendshipUser)
-    )
-      .filter(fu => fu.id === id)
-      .map(f => f.friendship);
-
-    console.log(
-      'friendshipByFriendshipUserLinkId',
-      friendshipByFriendshipUserLinkId[0],
-    );
-
+    //console.log(friendRequest);
     await DataStore.save(
-      Friendship.copyOf(friendshipByFriendshipUserLinkId[0], updated => {
+      Friendship.copyOf(friendRequest, updated => {
         updated.requestAccepted = true;
       }),
     );
+    Alert.alert('Friend Request Accepted');
   };
 
   const getfriendRequests = async () => {
-    //first we get the un accepted friend requests.
-    const usersFriendships = (await DataStore.query(FriendshipUser))
-      .filter(fu => fu.user.id == user.id)
-      .map(fu => fu.friendship)
-      .filter(f => !f.requestAccepted)
-      .map(f => f.id);
-    //console.log("users friendships", usersFriendships)
-    const usersLinkedToSameFriendship = (
-      await DataStore.query(FriendshipUser)
-    ).filter(
-      fu =>
-        usersFriendships.includes(fu.friendship.id) &&
-        fu.user.username != user.username,
+    const friendRequests = await DataStore.query(Friendship, f =>
+      f.friendshipReceiverId('eq', user.id).requestAccepted('eq', false),
     );
-    //console.log("users with same friendships",usersLinkedToSameFriendship )
-    return setFriendRequests(usersLinkedToSameFriendship);
+    //console.log('friend requests', friendRequests);
+    return setFriendRequests(friendRequests);
   };
 
   useEffect(() => {
@@ -175,11 +135,11 @@ const FindFriendsScreen = () => {
               }}
               renderItem={({item}) => (
                 <View style={styles.friendRequests}>
-                  <Text style={styles.title}>{item.user.username}</Text>
+                  <Text style={styles.title}>{item.Sender.username}</Text>
                   <View>
                     <Button
                       title="Accept"
-                      onPress={() => acceptFriendRequest(item.id)}></Button>
+                      onPress={() => acceptFriendRequest(item)}></Button>
                   </View>
                 </View>
               )}
