@@ -4,10 +4,9 @@ import { schema } from './schema';
 
 
 
-const { Friendship, User, FriendshipUser } = initSchema(schema);
+const { Friendship, User } = initSchema(schema);
 
 export {
   Friendship,
-  User,
-  FriendshipUser
+  User
 };

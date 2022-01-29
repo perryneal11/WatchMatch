@@ -17,18 +17,32 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
-                "Users": {
-                    "name": "Users",
-                    "isArray": true,
+                "Receiver": {
+                    "name": "Receiver",
+                    "isArray": false,
                     "type": {
-                        "model": "FriendshipUser"
+                        "model": "User"
                     },
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": [],
-                    "isArrayNullable": true,
                     "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "friendship"
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "friendshipReceiverId"
+                    }
+                },
+                "Sender": {
+                    "name": "Sender",
+                    "isArray": false,
+                    "type": {
+                        "model": "User"
+                    },
+                    "isRequired": true,
+                    "attributes": [],
+                    "association": {
+                        "connectionType": "HAS_ONE",
+                        "associatedWith": "id",
+                        "targetName": "friendshipSenderId"
                     }
                 },
                 "createdAt": {
@@ -46,6 +60,20 @@ export const schema = {
                     "isRequired": false,
                     "attributes": [],
                     "isReadOnly": true
+                },
+                "friendshipReceiverId": {
+                    "name": "friendshipReceiverId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
+                },
+                "friendshipSenderId": {
+                    "name": "friendshipSenderId",
+                    "isArray": false,
+                    "type": "ID",
+                    "isRequired": true,
+                    "attributes": []
                 }
             },
             "syncable": true,
@@ -135,20 +163,6 @@ export const schema = {
                     "isRequired": true,
                     "attributes": []
                 },
-                "friendships": {
-                    "name": "friendships",
-                    "isArray": true,
-                    "type": {
-                        "model": "FriendshipUser"
-                    },
-                    "isRequired": false,
-                    "attributes": [],
-                    "isArrayNullable": true,
-                    "association": {
-                        "connectionType": "HAS_MANY",
-                        "associatedWith": "user"
-                    }
-                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -190,71 +204,9 @@ export const schema = {
                     }
                 }
             ]
-        },
-        "FriendshipUser": {
-            "name": "FriendshipUser",
-            "fields": {
-                "id": {
-                    "name": "id",
-                    "isArray": false,
-                    "type": "ID",
-                    "isRequired": true,
-                    "attributes": []
-                },
-                "friendship": {
-                    "name": "friendship",
-                    "isArray": false,
-                    "type": {
-                        "model": "Friendship"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "friendshipID"
-                    }
-                },
-                "user": {
-                    "name": "user",
-                    "isArray": false,
-                    "type": {
-                        "model": "User"
-                    },
-                    "isRequired": true,
-                    "attributes": [],
-                    "association": {
-                        "connectionType": "BELONGS_TO",
-                        "targetName": "userID"
-                    }
-                },
-                "createdAt": {
-                    "name": "createdAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                },
-                "updatedAt": {
-                    "name": "updatedAt",
-                    "isArray": false,
-                    "type": "AWSDateTime",
-                    "isRequired": false,
-                    "attributes": [],
-                    "isReadOnly": true
-                }
-            },
-            "syncable": true,
-            "pluralName": "FriendshipUsers",
-            "attributes": [
-                {
-                    "type": "model",
-                    "properties": {}
-                }
-            ]
         }
     },
     "enums": {},
     "nonModels": {},
-    "version": "8c0169d2c22a3e2765adf09ef63ff425"
+    "version": "092148e6cb2e2f08c472d07d2ec292e5"
 };

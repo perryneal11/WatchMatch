@@ -31,25 +31,18 @@ const MatchesScreen = () => {
   };
 
   const getFriendsList = async () => {
-    const usersFriendships = (await DataStore.query(FriendshipUser))
-      .filter(fu => fu.user.id == user.id)
-      .map(fu => fu.friendship.id);
-    //console.log("users friendships", usersFriendships)
-    const usersLinkedToSameFriendship = (await DataStore.query(FriendshipUser))
-      .filter(
-        fu =>
-          usersFriendships.includes(fu.friendship.id) &&
-          fu.user.username != user.username,
-      )
-      .map(fu => fu.user);
-    //console.log("users with same friendships",usersLinkedToSameFriendship )
-    //remove duplicates from friends
-    const friendsToShow = Array.from(
-      new Set(usersLinkedToSameFriendship.map(u => u.id)),
-    ).map(id => {
-      return usersLinkedToSameFriendship.find(f => f.id === id);
-    });
-    setFriends(friendsToShow);
+    const usersFriendships = await DataStore.query(Friendship, f =>
+      f.or(f =>
+        f.friendshipSenderId('eq', user.id).friendshipReceiverId('eq', user.id),
+      ),
+    );
+    const receviers = usersFriendships.map(f => f.Receiver);
+    const senders = usersFriendships.map(f => f.Sender);
+    const friends = receviers.concat(senders).filter(u => u.id != user.id);
+    const friendsNoDuplicates = [...new Set(friends)];
+    console.log('wtf', friends);
+
+    setFriends(friendsNoDuplicates);
   };
 
   useEffect(() => {
@@ -58,7 +51,7 @@ const MatchesScreen = () => {
 
   useEffect(() => {
     getCurrentUser();
-    getFriendsList();
+    //getFriendsList();
   }, []);
 
   return (
