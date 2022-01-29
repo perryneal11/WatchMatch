@@ -153,7 +153,7 @@ const HomeScreen = () => {
           <ActivityIndicator size="large" color="#5500dc" />
         </View>
       ) : (
-        <View>
+        <View style = {styles.animatedStack}>
           {!filteredData.length == 0 ? (
             <AnimatedStack
               data={filteredData}
@@ -180,6 +180,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     backgroundColor: '#ededed',
+  },
+  animatedStack: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1,
+    backgroundColor: '#ededed',
+    width: '100%',
+    height: '100%'
   },
   error: {
     flex: 6,
