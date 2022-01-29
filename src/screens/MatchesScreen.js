@@ -34,9 +34,9 @@ const MatchesScreen = () => {
     const usersFriendships = await DataStore.query(Friendship, f =>
       f.or(f =>
         f.friendshipSenderId('eq', user.id).friendshipReceiverId('eq', user.id),
-      ),
+      ).requestAccepted('eq', true),
     );
-        
+
     const receivers = usersFriendships.map(f => f.Receiver );
     const senders = usersFriendships.map(f => f.Sender);
     console.log("rec",usersFriendships)
