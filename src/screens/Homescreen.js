@@ -99,7 +99,7 @@ const HomeScreen = () => {
           ),
         );
       } else console.log('b');
-      return movieData;
+      return setFilteredData(movieData);
     }
   };
 
