@@ -12,10 +12,12 @@ import TopRow from '../component/ButtonBars/topRow';
 import {Auth, DataStore, Predicates} from 'aws-amplify';
 import {useEffect} from 'react/cjs/react.development';
 import {Friendship, FriendshipUser, User} from '../models';
+import { useNavigation } from '@react-navigation/native';
 
 const MatchesScreen = () => {
   const [user, setUser] = useState({});
   const [friends, setFriends] = useState([]);
+  const navigation = useNavigation();
 
   const getCurrentUser = async () => {
     const userVar = await Auth.currentAuthenticatedUser();
@@ -26,8 +28,10 @@ const MatchesScreen = () => {
     return setUser(dbUser);
   };
 
-  const viewWatchMatches = () => {
-    console.log('yay');
+  const viewWatchMatches = item => {
+    //console.log('yay', item);
+    navigation.navigate('WatchMatches', {friend: item, user: user}  )
+
   };
 
   const getFriendsList = async () => {
@@ -70,7 +74,6 @@ const MatchesScreen = () => {
             <View style={styles.metaInfo}>
               <Text style={styles.title}>
                 {item.username}
-                {item.awsID}
               </Text>
             </View>
             <View>

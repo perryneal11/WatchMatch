@@ -9,6 +9,7 @@ import MatchesScreen from './src/screens/MatchesScreen.js';
 import Amplify from 'aws-amplify'
 import {withAuthenticator} from 'aws-amplify-react-native'
 import config from './src/aws-exports.js'
+import WatchMatchesScreen from './src/screens/WatchMatchesScreen.js';
 
 Amplify.configure({
   ...config,
@@ -24,11 +25,13 @@ const App = () => {
     <NavigationContainer>
       <SafeAreaView style = {styles.root}>
       <View style={styles.pageContainer}>
-        <Stack.Navigator initialRouteName='Home'>
+        <Stack.Navigator initialRouteName='Matches'>
           <Stack.Screen name="Home" component = {HomeScreen} ></Stack.Screen>
           <Stack.Screen name="Matches" component = {MatchesScreen} options = {headerBackVisible = false}></Stack.Screen>
           <Stack.Screen name="FindFriends" component = {FindFriendsScreen} options = {headerBackVisible = false}></Stack.Screen>
           <Stack.Screen name="Profile" component = {ProfileScreen} options = {headerBackVisible = false}></Stack.Screen>
+          <Stack.Screen name="WatchMatches" component = {WatchMatchesScreen} options = {headerBackVisible = false}></Stack.Screen>
+
         </Stack.Navigator>
       </View>
       </SafeAreaView>
