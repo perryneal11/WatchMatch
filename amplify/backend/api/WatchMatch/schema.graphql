@@ -9,8 +9,8 @@ type User @model @auth(rules: [{allow: public}]) {
   id: ID!
   Netflix: Boolean
   Prime: Boolean
-  approvedContentIMDBID: [String]
-  unapprovedContentIMDBID: [String]
+  approvedContentIMDBID: [AWSJSON]
+  unapprovedContentIMDBID: [AWSJSON]
   friends: [String]
   username: String!
   awsID: String!

@@ -1,15 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Pressable, Text, SafeAreaView, FlatList, Image} from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import {DataStore} from 'aws-amplify';
 
 const WatchMatchesScreen = ({route, navigation}) => {
   const friend = route.params;
   const [shows, setShows] = useState([])
+  const [showsWithInfo, setShowsWithInfo] = useState([])
 
-  const getMovieInfo = async () => {
-    //let imdbID = "tt0848228"
-    fetch("https://streaming-availability.p.rapidapi.com/get/basic?country=us&imdb_id=" + imdbID.toString() + "&output_language=en", {
+  //https://json.extendsclass.com/bin/61e0ff6fe701
+
+  const getMovieInfo = async (imdbIDs) => {
+    let imdbID = "tt0848228"
+    var showsWithInfoArray = showsWithInfo
+    console.log("imdbIDs",imdbIDs )
+    imdbIDs.forEach(element => {
+      console.log("element", element.toString())
+      fetch("https://streaming-availability.p.rapidapi.com/get/basic?country=us&imdb_id=" + imdbID + "&output_language=en", {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
@@ -18,63 +23,78 @@ const WatchMatchesScreen = ({route, navigation}) => {
     })
     .then(response => response.json())
     .then(data => {
-        //console.log(data)
+        console.log(data)
+        showsWithInfoArray.push(data)
+        return setShowsWithInfo(showsWithInfoArray)
         //setMovieData(data.results)
       })
     .catch(err => {
         //console.error(err);
     });
-    
+    })
+  }
+
+  const getMovieInfoTemp = async (imdbIDs) => {
+    let imdbID = "tt0848228"
+    var showsWithInfoArray = showsWithInfo
+    //console.log("imdbIDs",imdbIDs )
+    imdbIDs.forEach(element => {
+      console.log("element", element.toString())
+      var data = {imdbid: imdbID, backpath: "https://image.tmdb.org/t/p/w300//nNmJRkg8wWnRmzQDe2FwKbPIsJV.jpg"}
+      showsWithInfoArray.push(data)
+    })
+    return setShowsWithInfo(showsWithInfoArray)
   }
 
   const getShowsInCommon = () => {
     const friendsShows = friend.friend.approvedContentIMDBID;
-    //console.log('friends shows', friendsShows);
+    console.log('friends shows', friendsShows);
     const usersShows = route.params.user.approvedContentIMDBID;
-    //console.log('your shows', friendsShows);
+    console.log('your shows', friendsShows);
     const combined = usersShows.concat(friendsShows);
-    //console.log('scombined', combined);
+    console.log('scombined', combined);
     const showsYouBothLike = combined.filter(
       s => friendsShows.includes(s) && usersShows.includes(s),
     );
-    //console.log('showsYouBothLike', showsYouBothLike);
+    console.log('showsYouBothLike', showsYouBothLike);
     const showsNoDuplicates = [...new Set(showsYouBothLike)];
-    //console.log('showsNoDuplicates', showsNoDuplicates);
+    console.log('showsNoDuplicates', showsNoDuplicates);
     return setShows(showsNoDuplicates)
   };
 
+  useEffect(()=>{
+    getMovieInfoTemp(shows)
+    console.log("here", showsWithInfo)
+  }, [shows])
+
   useEffect(() => {
     getShowsInCommon();
-    getMovieInfo()
-  }, []);
-
-  {
-    //console.log('wha', friend.friend);
-  }
+    
+  },[]);
+ 
   return (
     <SafeAreaView style={styles.pageContainer}>
-        
-      <Text style = {styles.header}>Shows for you and {friend.friend.username} </Text>
-      {shows?
-      (<FlatList
-        data={shows}
+    <Text style = {styles.header}>Shows for you and {friend.friend.username} </Text>
+      {showsWithInfo? (
+      <View style = {styles.root}>
+      {showsWithInfo.map(showsWithInfo => ( 
+        <FlatList
+        data={showsWithInfo}
         style = {styles.shows}
-        keyExtractor={(item, index) => {
-          return item.id;
-        }} 
+        keyExtractor={(item, index) => {return item.id}} 
         renderItem={({item}) => (
-          <View style = {styles.show}>
-            <Image source = {{uri: "https://image.tmdb.org/t/p/w300//nNmJRkg8wWnRmzQDe2FwKbPIsJV.jpg"}} style = {styles.image}/>
+          <View style = {styles.show} key = {item.id}>
+            <Image source = {item.backpath} style = {styles.image}/>
             <View>
               <Text>show {item}</Text>
             </View>
           </View>
         )}
       />
+      ))}
+      </View>
       ):(<Text>No shows you both like</Text>)}
-    
-  </SafeAreaView>
-  )
+    </SafeAreaView>)
 };
 
 const styles = StyleSheet.create({
@@ -83,6 +103,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         flex: 3,
         backgroundColor: '#ededed',
+      },
+      root: {
+        width: '100%',
+        height: '100%',
+        flex: 1
       },
     shows: {
         width: '100%',

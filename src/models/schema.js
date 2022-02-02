@@ -128,7 +128,7 @@ export const schema = {
                 "approvedContentIMDBID": {
                     "name": "approvedContentIMDBID",
                     "isArray": true,
-                    "type": "String",
+                    "type": "AWSJSON",
                     "isRequired": false,
                     "attributes": [],
                     "isArrayNullable": true
@@ -136,7 +136,7 @@ export const schema = {
                 "unapprovedContentIMDBID": {
                     "name": "unapprovedContentIMDBID",
                     "isArray": true,
-                    "type": "String",
+                    "type": "AWSJSON",
                     "isRequired": false,
                     "attributes": [],
                     "isArrayNullable": true
@@ -208,5 +208,5 @@ export const schema = {
     },
     "enums": {},
     "nonModels": {},
-    "version": "092148e6cb2e2f08c472d07d2ec292e5"
+    "version": "a754725c93e51494a286f38ed78bc2fb"
 };

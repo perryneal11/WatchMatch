@@ -16,15 +16,26 @@ const ProfileScreen = () => {
             const dbUsers = await DataStore.query(User, u => u.awsID === who.attributes.sub)
                 if(dbUsers.length < 0) {
                     return;
+                } else {
+                    const dbUser = dbUsers[0];
+                    setUser(dbUser)
+                    setNetflix(dbUser.Netflix)
+                    setPrime(dbUser.Prime)
                 }
-            const dbUser = dbUsers[0];
-            setUser(dbUser)
-            setNetflix(dbUser.Netflix)
-            setPrime(dbUser.Prime)
+
         }
         getCurrentUser();
-
     },[])
+
+    const signOut = async () => {
+        try {
+            await DataStore.clear
+            Auth.signOut()
+            
+        } catch (error) {
+            console.log('error signing out: ', error);
+        }
+    };
 
     const save = async () => { 
         if(user) {
@@ -76,7 +87,7 @@ const ProfileScreen = () => {
                     <Text>Save changes</Text>
                 </Pressable>
 
-                <Pressable onPress={Auth.signOut} style = {styles.button}>
+                <Pressable onPress={signOut} style = {styles.button}>
                     <Text>Sign out</Text>
                 </Pressable>
             </View>

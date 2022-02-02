@@ -124,11 +124,11 @@ const HomeScreen = () => {
   };
 
   const onSwipeLeft = currentMovie => {
-    save(currentMovie.imdbID, true);
+    save(currentMovie, true);
   };
 
   const onSwipeRight = currentMovie => {
-    save(currentMovie.imdbID, false);
+    save(currentMovie, false);
   };
 
   useEffect(() => {
