@@ -61,7 +61,6 @@ const MatchesScreen = () => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <Text>Youre Friends</Text>
 
       {friends? (<FlatList
         data={friends}

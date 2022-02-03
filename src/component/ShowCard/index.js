@@ -3,8 +3,10 @@ import {Text, View, ImageBackground, StyleSheet} from 'react-native';
 
 const Card = props => {
   const {title, url, overview} = props.movie;
-  const image =  "https://image.tmdb.org/t/p/w300/" + props.image.toString()
 
+  
+  //const image =  "https://image.tmdb.org/t/p/w300/" + props.image.toString()
+  const image = "https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,h_465,q_auto,w_310/v1638549265/amc-cdn/production/2/movies/66500/66520/PosterDynamic/132670.jpg"
   //console.log(props.movie)
   
   return (

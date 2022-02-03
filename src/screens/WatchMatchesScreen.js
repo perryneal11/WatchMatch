@@ -1,97 +1,65 @@
 import React, {useEffect, useState} from 'react';
 import {View, StyleSheet, Pressable, Text, SafeAreaView, FlatList, Image} from 'react-native';
+import AnimatedStack from '../component/AnimatedStack/';
+import Card from '../component/ShowCard/';
 
 const WatchMatchesScreen = ({route, navigation}) => {
   const friend = route.params;
   const [shows, setShows] = useState([])
-  const [showsWithInfo, setShowsWithInfo] = useState([])
-
-  //https://json.extendsclass.com/bin/61e0ff6fe701
-
-  const getMovieInfo = async (imdbIDs) => {
-    let imdbID = "tt0848228"
-    var showsWithInfoArray = showsWithInfo
-    console.log("imdbIDs",imdbIDs )
-    imdbIDs.forEach(element => {
-      console.log("element", element.toString())
-      fetch("https://streaming-availability.p.rapidapi.com/get/basic?country=us&imdb_id=" + imdbID + "&output_language=en", {
-        "method": "GET",
-        "headers": {
-            "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": "db460db4c2msha835e81c42d874ep1c1433jsnb1e93e0e6758"
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
-        showsWithInfoArray.push(data)
-        return setShowsWithInfo(showsWithInfoArray)
-        //setMovieData(data.results)
-      })
-    .catch(err => {
-        //console.error(err);
-    });
-    })
-  }
-
-  const getMovieInfoTemp = async (imdbIDs) => {
-    let imdbID = "tt0848228"
-    var showsWithInfoArray = showsWithInfo
-    //console.log("imdbIDs",imdbIDs )
-    imdbIDs.forEach(element => {
-      console.log("element", element.toString())
-      var data = {imdbid: imdbID, backpath: "https://image.tmdb.org/t/p/w300//nNmJRkg8wWnRmzQDe2FwKbPIsJV.jpg"}
-      showsWithInfoArray.push(data)
-    })
-    return setShowsWithInfo(showsWithInfoArray)
-  }
+  const [currentMovie, setCurrentMovie] = React.useState();
 
   const getShowsInCommon = () => {
     const friendsShows = friend.friend.approvedContentIMDBID;
     console.log('friends shows', friendsShows);
     const usersShows = route.params.user.approvedContentIMDBID;
     console.log('your shows', friendsShows);
-    const combined = usersShows.concat(friendsShows);
-    console.log('scombined', combined);
-    const showsYouBothLike = combined.filter(
+    if (friendsShows != null && usersShows != null) {
+      const combined = usersShows.concat(friendsShows);
+    console.log('combined', combined);
+
+
+    combined.forEach(element => {
+      console.log('a', usersShows.includes(element));
+    });
+
+    const showsNoDuplicates = [...new Set(combined)];
+    console.log('showsNoDuplicates', showsNoDuplicates);
+    const showsYouBothLike = showsNoDuplicates.filter(
       s => friendsShows.includes(s) && usersShows.includes(s),
     );
-    console.log('showsYouBothLike', showsYouBothLike);
-    const showsNoDuplicates = [...new Set(showsYouBothLike)];
-    console.log('showsNoDuplicates', showsNoDuplicates);
+
+ 
     return setShows(showsNoDuplicates)
+    }
+    else return 
   };
 
-  useEffect(()=>{
-    getMovieInfoTemp(shows)
-    console.log("here", showsWithInfo)
-  }, [shows])
+  const onSwipeLeft = currentMovie => {
+    console.log("left")
+  };
+
+  const onSwipeRight = currentMovie => {
+    console.log("right")
+  };
 
   useEffect(() => {
     getShowsInCommon();
-    
   },[]);
  
   return (
     <SafeAreaView style={styles.pageContainer}>
     <Text style = {styles.header}>Shows for you and {friend.friend.username} </Text>
-      {showsWithInfo? (
+      {shows? (
       <View style = {styles.root}>
-      {showsWithInfo.map(showsWithInfo => ( 
-        <FlatList
-        data={showsWithInfo}
-        style = {styles.shows}
-        keyExtractor={(item, index) => {return item.id}} 
-        renderItem={({item}) => (
-          <View style = {styles.show} key = {item.id}>
-            <Image source = {item.backpath} style = {styles.image}/>
-            <View>
-              <Text>show {item}</Text>
-            </View>
-          </View>
-        )}
-      />
-      ))}
+          <AnimatedStack
+            data={shows}
+            renderItem={({item}) => (
+              <Card movie={item} image={item.backdropPath} />
+            )}
+          onSwipeLeft={onSwipeLeft}
+          onSwipeRight={onSwipeRight}
+          setCurrentMovie={setCurrentMovie}>
+          </AnimatedStack>
       </View>
       ):(<Text>No shows you both like</Text>)}
     </SafeAreaView>)

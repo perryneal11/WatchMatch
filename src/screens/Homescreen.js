@@ -110,13 +110,13 @@ const HomeScreen = () => {
         if (updated.approvedContentIMDBID == null) {
           updated.approvedContentIMDBID = [newIMDBID];
         } else {
-          updated.approvedContentIMDBID.push(newIMDBID);
+          updated.approvedContentIMDBID = [newIMDBID];
         }
       } else {
         if (updated.unapprovedContentIMDBID == null) {
           updated.unapprovedContentIMDBID = [newIMDBID];
         } else {
-          updated.unapprovedContentIMDBID.push(newIMDBID);
+          updated.unapprovedContentIMDBID = [newIMDBID];
         }
       }
     });
@@ -124,11 +124,11 @@ const HomeScreen = () => {
   };
 
   const onSwipeLeft = currentMovie => {
-    save(currentMovie, true);
+    save(currentMovie, false);
   };
 
   const onSwipeRight = currentMovie => {
-    save(currentMovie, false);
+    save(currentMovie, true);
   };
 
   useEffect(() => {
