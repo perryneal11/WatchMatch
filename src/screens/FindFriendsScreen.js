@@ -9,6 +9,7 @@ import {
   Button,
   Image,
   Alert,
+  Pressable
 } from 'react-native';
 import TopRow from '../component/ButtonBars/topRow';
 import {Auth, DataStore, Predicates} from 'aws-amplify';
@@ -175,16 +176,21 @@ const FindFriendsScreen = () => {
           onChangeText={newQuery => {
             setQuery(newQuery), setPotentialFriends([]);
           }}
-          style={{backgroundColor: '#fff', paddingHorizontal: 20}}></TextInput>
-        <Button title="Search" 
+          style={{backgroundColor: '#fff', paddingHorizontal: 20}}/>
+        <Pressable 
         onPress={() => search(query)}
         disabled={!query}
-        style={styles.button}></Button>
+        style={styles.button}>
+          <Text>Search</Text>
+        </Pressable>
 
         {!userHasSearchedYet && potentialFriends.length == 0 ? (
-          <Text>Find your friends</Text>
+          <Text></Text>
         ) : (
-          <Text>No results</Text>
+
+            <Text style={styles.find}> No results</Text>
+
+          
         )}
         {potentialFriends ? (
           <FlatList
@@ -234,6 +240,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     margin: 10
+},
+find:{
+  justifyContent: 'center',
+  alignItems: 'center',
+  textAlign: 'center',
+  backgroundColor: '#D6173c',
+  flex: 1
 },
   user: {
     width: 100,
