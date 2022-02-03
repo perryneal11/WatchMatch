@@ -9,14 +9,14 @@ import {
   Button,
   Image,
   Alert,
-  Pressable
+  Pressable,
 } from 'react-native';
 import TopRow from '../component/ButtonBars/topRow';
 import {Auth, DataStore, Predicates} from 'aws-amplify';
 import {useEffect} from 'react/cjs/react.development';
 import {FriendshipUser, User, Friendship} from '../models';
 import {TextInput} from 'react-native-gesture-handler';
-
+// @refresh reset
 const FindFriendsScreen = () => {
   const [user, setUser] = useState({});
   const [friends, setFriends] = useState();
@@ -36,17 +36,20 @@ const FindFriendsScreen = () => {
     return setUser(dbUser);
   };
 
-
   const getFriendsList = async () => {
     const usersFriendships = await DataStore.query(Friendship, f =>
-      f.or(f =>
-        f.friendshipSenderId('eq', user.id).friendshipReceiverId('eq', user.id),
-      ).requestAccepted('eq', true),
+      f
+        .or(f =>
+          f
+            .friendshipSenderId('eq', user.id)
+            .friendshipReceiverId('eq', user.id),
+        )
+        .requestAccepted('eq', true),
     );
 
-    const receivers = usersFriendships.map(f => f.Receiver );
+    const receivers = usersFriendships.map(f => f.Receiver);
     const senders = usersFriendships.map(f => f.Sender);
-    console.log("rec",usersFriendships)
+    console.log('rec', usersFriendships);
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
     console.log('wtf', friendsNoDuplicates);
@@ -63,17 +66,19 @@ const FindFriendsScreen = () => {
         page: 1,
         limit: 10,
       },
-    )
-    
+    );
+
     //console.log("friends we filtrin", potentialFriendsVar.filter(u => !friends.includes(u.awsID)));
-    setUserHasSearchedYet(true)
+    setUserHasSearchedYet(true);
     if (potentialFriendsVar.length > 0) {
       setIsLoading(false);
-      setQuery("")
-      return setPotentialFriends(potentialFriendsVar.filter(u => friends.includes(u.awsID)));
+      setQuery('');
+      return setPotentialFriends(
+        potentialFriendsVar.filter(u => friends.includes(u.awsID)),
+      );
     } else {
       setIsLoading(false);
-      setQuery("")
+      setQuery('');
       return;
     }
   };
@@ -86,7 +91,7 @@ const FindFriendsScreen = () => {
         Sender: user,
         Recevier: receiver,
         friendshipReceiverId: receiver.id,
-        friendshipSenderId: user.id
+        friendshipSenderId: user.id,
       }),
       setPotentialFriends([]),
     );
@@ -95,9 +100,8 @@ const FindFriendsScreen = () => {
 
     //TODO: Make add button disabled for this user
   };
-  
-  const acceptFriendRequest = async friendRequest => {
 
+  const acceptFriendRequest = async friendRequest => {
     //console.log(friendRequest);
     await DataStore.save(
       Friendship.copyOf(friendRequest, updated => {
@@ -147,50 +151,49 @@ const FindFriendsScreen = () => {
     return (
       <SafeAreaView style={styles.root}>
         {friendRequests.length > 0 ? (
-          <>
-            <Text>Friend Requests</Text>
+          <View style ={styles.friendRequests}>
+            <Text>New Friend Requests!</Text>
             <FlatList
               data={friendRequests}
               keyExtractor={(item, index) => {
                 return item.id;
               }}
               renderItem={({item}) => (
-                <View style={styles.friendRequests}>
-                  <Text style={styles.title}>{item.Sender.username}</Text>
+                <View style={styles.friendRequest}>
+                  <Text style={styles.friendRequestUsername}>{item.Sender.username}</Text>
                   <View>
-                    <Button
-                      title="Accept"
-                      onPress={() => acceptFriendRequest(item)}></Button>
+                    <Pressable
+                      onPress={() => acceptFriendRequest(item)}
+                      style={styles.acceptButton}>
+                        <Text>+</Text>
+                      </Pressable>
                   </View>
                 </View>
               )}
             />
-          </>
+          </View>
         ) : (
           <></>
         )}
 
-        <Text>Find Friends</Text>
-
+        <View></View>
         <TextInput
           onChangeText={newQuery => {
             setQuery(newQuery), setPotentialFriends([]);
           }}
-          style={{backgroundColor: '#fff', paddingHorizontal: 20}}/>
-        <Pressable 
-        onPress={() => search(query)}
-        disabled={!query}
-        style={styles.button}>
+          style={styles.textInput}
+        />
+        <Pressable
+          onPress={() => search(query)}
+          disabled={!query}
+          style={styles.button}>
           <Text>Search</Text>
         </Pressable>
 
         {!userHasSearchedYet && potentialFriends.length == 0 ? (
           <Text></Text>
         ) : (
-
-            <Text style={styles.find}> No results</Text>
-
-          
+          <Text style={styles.find}> No results</Text>
         )}
         {potentialFriends ? (
           <FlatList
@@ -226,28 +229,41 @@ const FindFriendsScreen = () => {
 const styles = StyleSheet.create({
   root: {
     width: '100%',
-    flex: 3,
+    flex: 1,
     padding: 10,
   },
   users: {
     flexDirection: 'row',
     flexWrap: 'wrap',
+    backgroundColor: 'blue',
+    
   },
   button: {
     backgroundColor: '#D6173c',
     height: 25,
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
-    margin: 10
-},
-find:{
-  justifyContent: 'center',
-  alignItems: 'center',
-  textAlign: 'center',
-  backgroundColor: '#D6173c',
-  flex: 1
-},
+    margin: 10,
+  },
+  acceptButton: {
+    backgroundColor: '#87CEEB',
+    height: 25,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderColor: 'black',
+    margin: 10,
+  },
+  find: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    backgroundColor: 'orange',
+    flex: 1,
+  },
   user: {
     width: 100,
     height: 100,
@@ -255,17 +271,41 @@ find:{
     borderWidth: 2,
     borderRadius: 50,
     borderColor: 'black',
+    backgroundColor: 'orange',
+    
     padding: 3,
   },
   image: {
     width: '100%',
     height: '100%',
     borderRadius: 50,
+    backgroundColor: 'orange',
+    
   },
   listItem: {
     borderColor: 'black',
     borderWidth: 3,
     margin: 3,
+    backgroundColor: 'orange',
+    
+  },
+  textInput: {
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    height: 40,
+    margin: 10,
+  },
+  friendRequest: {
+    flexDirection: 'row',
+    alignContent: 'space-between',
+  },
+  friendRequests: {
+    flexDirection: 'column',
+    backgroundColor: 'yellow',
+    borderRadius: 20,
+  },
+  friendRequestUsername:{
   },
 });
 

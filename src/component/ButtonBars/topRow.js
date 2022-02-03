@@ -36,10 +36,8 @@ const TopRow  = props => {
 
 const styles = StyleSheet.create({
     root: {
-      flex: 1
     },
     pageContainer: {
-      flex: 1,
     },
     topNavigation:{
       flexDirection: 'row',
