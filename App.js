@@ -31,7 +31,19 @@ const App = () => {
         const dbUsers = await DataStore.query(User, u => u.awsID('eq', who.attributes.sub))
         console.log("dbusers", dbUsers)    
         if(dbUsers.length < 1) {
-                return;
+          const authUser = await Auth.currentAuthenticatedUser()
+          const newUser = new User({
+              Netflix: false,
+              Prime: false,
+              awsID: authUser.attributes.sub,
+              username: authUser.attributes.email
+          })
+          await DataStore.save(newUser)
+          Alert.alert("New user created")  
+          
+      
+          
+              return;
             } else {
                 
                 const dbUser = dbUsers[0];
