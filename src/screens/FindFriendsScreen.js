@@ -35,27 +35,46 @@ const FindFriendsScreen = () => {
     return setUser(dbUser);
   };
 
+
+  const getFriendsList = async () => {
+    const usersFriendships = await DataStore.query(Friendship, f =>
+      f.or(f =>
+        f.friendshipSenderId('eq', user.id).friendshipReceiverId('eq', user.id),
+      ).requestAccepted('eq', true),
+    );
+
+    const receivers = usersFriendships.map(f => f.Receiver );
+    const senders = usersFriendships.map(f => f.Sender);
+    console.log("rec",usersFriendships)
+    const friends = receivers.concat(senders).filter(u => u.id != user.id);
+    const friendsNoDuplicates = [...new Set(friends)];
+    console.log('wtf', friendsNoDuplicates);
+    return setFriends(friendsNoDuplicates);
+  };
+
   const search = async () => {
     setIsLoading(true);
-    console.log('query', query);
-    const potentialFriendsVar = await DataStore.query(
+    //console.log('query', query);
+    var potentialFriendsVar = await DataStore.query(
       User,
       u => u.username('contains', query.toLowerCase()),
       {
         page: 1,
         limit: 10,
       },
-    );
-    console.log(potentialFriendsVar);
-
+    )
+    
+    //console.log("friends we filtrin", potentialFriendsVar.filter(u => !friends.includes(u.awsID)));
+    setUserHasSearchedYet(true)
     if (potentialFriendsVar.length > 0) {
       setIsLoading(false);
-      return setPotentialFriends(potentialFriendsVar);
+      setQuery("")
+      return setPotentialFriends(potentialFriendsVar.filter(u => friends.includes(u.awsID)));
     } else {
       setIsLoading(false);
+      setQuery("")
       return;
     }
-    //TODO: filter out already friends
   };
 
   const sendFriendRequest = async receiver => {
@@ -104,6 +123,7 @@ const FindFriendsScreen = () => {
     getCurrentUser();
     setPotentialFriends([]);
     getfriendRequests();
+    getFriendsList();
   }, []);
 
   if (isLoading) {
@@ -156,12 +176,15 @@ const FindFriendsScreen = () => {
             setQuery(newQuery), setPotentialFriends([]);
           }}
           style={{backgroundColor: '#fff', paddingHorizontal: 20}}></TextInput>
-        <Button title="Search" onPress={() => search(query)}></Button>
+        <Button title="Search" 
+        onPress={() => search(query)}
+        disabled={!query}
+        style={styles.button}></Button>
 
         {!userHasSearchedYet && potentialFriends.length == 0 ? (
           <Text>Find your friends</Text>
         ) : (
-          <Text></Text>
+          <Text>No results</Text>
         )}
         {potentialFriends ? (
           <FlatList
@@ -178,6 +201,7 @@ const FindFriendsScreen = () => {
                 <View>
                   <Button
                     title="Add"
+                    style={styles.button}
                     onPress={() => sendFriendRequest(item)}></Button>
                 </View>
               </View>
@@ -203,6 +227,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
+  button: {
+    backgroundColor: '#D6173c',
+    height: 25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    margin: 10
+},
   user: {
     width: 100,
     height: 100,
