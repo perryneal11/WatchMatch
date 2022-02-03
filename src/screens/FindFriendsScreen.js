@@ -120,15 +120,36 @@ const FindFriendsScreen = () => {
   };
 
   useEffect(() => {
+    let mounted = true 
+
+    if(mounted){
+
     getfriendRequests();
+    }
+    else{
+      console.log("mounting issue")
+    }
+
+    
+    return () => mounted = false
+
   }, [friendRequests]);
 
   useEffect(() => {
-    setIsLoading(false);
-    getCurrentUser();
-    setPotentialFriends([]);
-    getfriendRequests();
-    getFriendsList();
+    let mounted = true 
+    if (mounted) {
+      setIsLoading(false);
+      getCurrentUser();
+      setPotentialFriends([]);
+      getfriendRequests();
+      getFriendsList();
+    } 
+    else {
+      console.log("mounting issue")
+    }
+
+    return () => mounted = false
+
   }, []);
 
   if (isLoading) {
