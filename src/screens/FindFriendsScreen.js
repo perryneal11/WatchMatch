@@ -41,10 +41,10 @@ const FindFriendsScreen = props => {
 
     const receivers = usersFriendships.map(f => f.Receiver);
     const senders = usersFriendships.map(f => f.Sender);
-    console.log('rec', usersFriendships);
+    //console.log('rec', usersFriendships);
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
-    console.log('wtf', friendsNoDuplicates);
+    //console.log('wtf', friendsNoDuplicates);
     return setFriends(friendsNoDuplicates);
   };
 
@@ -54,19 +54,17 @@ const FindFriendsScreen = props => {
     var potentialFriendsVar = await DataStore.query(
       User,
       u => u.username('contains', query.toLowerCase()),
-      {
-        page: 1,
-        limit: 10,
-      },
     );
-
-    //console.log("friends we filtrin", potentialFriendsVar.filter(u => !friends.includes(u.awsID)));
+    //console.log("results:", potentialFriendsVar)
+    //console.log("friends:", friends)
+    //console.log("friends we filtrin", potentialFriendsVar.filter(u => friends.includes(u.awsID)));
     setUserHasSearchedYet(true);
     if (potentialFriendsVar.length > 0) {
+      //console.log("hit")
       setIsLoading(false);
       setQuery('');
       return setPotentialFriends(
-        potentialFriendsVar.filter(u => friends.includes(u.awsID)),
+        potentialFriendsVar.filter(u => !friends.includes(u.awsID) && u.username != user.username),
       );
     } else {
       setIsLoading(false);

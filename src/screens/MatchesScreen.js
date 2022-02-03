@@ -7,6 +7,7 @@ import {
   Image,
   FlatList,
   Button,
+  ActivityIndicator,
 } from 'react-native';
 import TopRow from '../component/ButtonBars/topRow';
 import {Auth, DataStore, Predicates} from 'aws-amplify';
@@ -17,7 +18,8 @@ import { useNavigation } from '@react-navigation/native';
 const MatchesScreen = props => {
   //const [user, setUser] = useState({});
   const user = props.route.params.user
-  const [friends, setFriends] = useState([]);
+  const [friends, setFriends] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const navigation = useNavigation();
 
   const viewWatchMatches = item => {
@@ -39,42 +41,72 @@ const MatchesScreen = props => {
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
     console.log('wtf', friendsNoDuplicates);
+    setIsLoading(false);
     return setFriends(friendsNoDuplicates);
+
   };
 
   useEffect(() => {
-    getFriendsList();
+    let mounted = true 
+    if (mounted) {
+      setIsLoading(true);
+      getFriendsList();
+      console.log("hw;eoifhweoifh", (friends != null))
+    } 
+    else {
+      console.log("mounting issue")
+    }
+    return () => mounted = false
   }, []);
 
-  return (
-    <SafeAreaView style={styles.root}>
-      <Text>Welcome {user.username}!</Text>
-      {friends? (<FlatList
-        data={friends}
-        keyExtractor={(item, index) => {
-          return item.id;
-        }} 
-        renderItem={({item}) => (
-          <View style={styles.listItem}>
-            <Image />
-            <View style={styles.metaInfo}>
-              <Text style={styles.title}>
-                {item.username}
-              </Text>
+  if (isLoading) {
+    return (
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <ActivityIndicator size="large" color="#5500dc" />
+      </View>
+    );
+  } else {
+    return (
+      <SafeAreaView style={styles.root}>
+        <Text>Welcome {user.username}!</Text>
+        {friends != null ?
+         (
+         <FlatList
+          data={friends}
+          style = {{backgroundColor: "orange"}}
+          keyExtractor={(item, index) => {
+            return item.id;
+          }} 
+          renderItem={({item}) => (
+            <View style={styles.listItem}>
+              <Image />
+              <View style={styles.metaInfo}>
+                <Text style={styles.title}>
+                  {item.username}
+                </Text>
+              </View>
+              <View>
+                <Button
+                  title="View Watch Matches"
+                  onPress={() => viewWatchMatches(item)}></Button>
+              </View>
             </View>
-            <View>
-              <Button
-                title="View Watch Matches"
-                onPress={() => viewWatchMatches(item)}></Button>
-            </View>
-          </View>
-        )}
-      />):(<Text>No friends</Text>)}
+          )}
+        />):(
+        <View style = {styles.noFriends}>
+          <Text>No friends</Text>
+          <Text>No friends</Text>
+          <Text>No friends</Text>
+          <Text>No friends</Text>
+          <Text>No friends</Text>
+          <Text>No friends</Text>
+          <Text>No friends</Text>
+          <Text>No friends</Text>
+        </View>)}
 
-      
       <TopRow screen="MATCHES"></TopRow>
     </SafeAreaView>
-  );
+  );}
 };
 
 const styles = StyleSheet.create({
@@ -82,14 +114,17 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
     padding: 10,
+    
   },
   users: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     flex: 1,
+    backgroundColor: 'green',
   },
   listItem: {
     borderColor: 'black',
+    backgroundColor: 'green',
     borderWidth: 3,
     margin: 3,
   },
@@ -101,12 +136,19 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     borderColor: 'black',
     padding: 3,
+    
   },
   image: {
     width: '100%',
     height: '100%',
     borderRadius: 50,
+    
   },
+  noFriends: {
+    width: "100%",
+    hegiht: "100%",
+    backgroundColor: 'blue'
+  }
 });
 
 export default MatchesScreen;

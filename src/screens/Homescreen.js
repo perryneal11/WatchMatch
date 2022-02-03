@@ -3,8 +3,7 @@ import {
   View,
   StyleSheet,
   Text,
-  useWindowDimensions,
-  Image,
+
   ActivityIndicator,
 } from 'react-native';
 import Card from '../component/ShowCard/';

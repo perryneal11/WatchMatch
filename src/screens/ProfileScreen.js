@@ -9,6 +9,7 @@ const ProfileScreen = props => {
     //const [user, setUser] = useState({})
     const [netflix, setNetflix] = useState(true)
     const [prime, setPrime] = useState(true)
+    const [isLoading, setIsLoading] = useState(false);
     const user = props.route.params.user
 
     const signOut = async () => {
