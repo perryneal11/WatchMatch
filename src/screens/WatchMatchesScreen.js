@@ -12,24 +12,27 @@ const WatchMatchesScreen = ({route, navigation}) => {
     const friendsShows = friend.friend.approvedContentIMDBID;
     console.log('friends shows', friendsShows);
     const usersShows = route.params.user.approvedContentIMDBID;
-    console.log('your shows', friendsShows);
-    if (friendsShows != null && usersShows != null) {
+    console.log('your shows', usersShows);
+    if (friendsShows != null || friendsShows.length != 0 && usersShows != null || usersShows.length != 0) {
       const combined = usersShows.concat(friendsShows);
-    console.log('combined', combined);
+      console.log('combined', combined);
 
 
-    combined.forEach(element => {
-      console.log('a', usersShows.includes(element));
-    });
+      combined.forEach(element => {
+        console.log('element', element, "in: ", usersShows, "? is", usersShows.includes(element));
+        console.log('element', element, "in: ", friendsShows, "? is", friendsShows.includes(element));
 
-    const showsNoDuplicates = [...new Set(combined)];
-    console.log('showsNoDuplicates', showsNoDuplicates);
-    const showsYouBothLike = showsNoDuplicates.filter(
-      s => friendsShows.includes(s) && usersShows.includes(s),
-    );
+      });
 
- 
-    return setShows(showsNoDuplicates)
+      //console.log('combined', combined, typeof combined);
+      const showsNoDuplicates = [...new Set(combined)];
+      console.log('showsNoDuplicates', showsNoDuplicates, typeof showsNoDuplicates);
+      const showsYouBothLike = showsNoDuplicates.filter(
+        s => friendsShows.includes(s) && usersShows.includes(s),
+      ).flat();
+      console.log('showsYouBothLike', showsYouBothLike, typeof showsYouBothLike);
+  
+      return setShows(showsYouBothLike)
     }
     else return 
   };

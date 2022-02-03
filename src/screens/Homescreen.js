@@ -11,10 +11,10 @@ import Card from '../component/ShowCard/';
 import AnimatedStack from '../component/AnimatedStack/';
 import {Auth, DataStore} from 'aws-amplify';
 import TopRow from '../component/ButtonBars/topRow';
-import {User} from '../models';
+
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-const HomeScreen = () => {
+const HomeScreen = props => {
   testData = [
     {
       title: 'movie',
@@ -39,7 +39,8 @@ const HomeScreen = () => {
   const [filteredData, setFilteredData] = React.useState([]);
   const [currentMovie, setCurrentMovie] = React.useState();
   const [isLoading, setIsLoading] = useState(false);
-  const [user, setUser] = React.useState({});
+  //const [user, setUser] = React.useState({});
+  const user = props.route.params.user
 
   const fetchData = async () => {
     fetch(
@@ -108,15 +109,15 @@ const HomeScreen = () => {
     const updateUser = User.copyOf(user, updated => {
       if (approved == true) {
         if (updated.approvedContentIMDBID == null) {
-          updated.approvedContentIMDBID = [newIMDBID];
+          updated.approvedContentIMDBID = newIMDBID;
         } else {
-          updated.approvedContentIMDBID = [newIMDBID];
+          updated.approvedContentIMDBID = newIMDBID;
         }
       } else {
         if (updated.unapprovedContentIMDBID == null) {
-          updated.unapprovedContentIMDBID = [newIMDBID];
+          updated.unapprovedContentIMDBID = newIMDBID;
         } else {
-          updated.unapprovedContentIMDBID = [newIMDBID];
+          updated.unapprovedContentIMDBID = newIMDBID;
         }
       }
     });
@@ -141,14 +142,16 @@ const HomeScreen = () => {
 
   useEffect(() => {
     setIsLoading(true);
+    console.log("user from home", props.route.params.user.username)
     //fetchData()
-    getCurrentUser();
+    //getCurrentUser();
     filterMovieData(movieData);
   }, []);
 
   return (
     <SafeAreaView style={styles.pageContainer}>
-      {isLoading ? (
+            <Text>Welcome {user.username}!</Text>
+                  {isLoading ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ActivityIndicator size="large" color="#5500dc" />
         </View>

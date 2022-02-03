@@ -14,19 +14,11 @@ import {useEffect} from 'react/cjs/react.development';
 import {Friendship, FriendshipUser, User} from '../models';
 import { useNavigation } from '@react-navigation/native';
 
-const MatchesScreen = () => {
-  const [user, setUser] = useState({});
+const MatchesScreen = props => {
+  //const [user, setUser] = useState({});
+  const user = props.route.params.user
   const [friends, setFriends] = useState([]);
   const navigation = useNavigation();
-
-  const getCurrentUser = async () => {
-    const userVar = await Auth.currentAuthenticatedUser();
-    const dbUsers = await DataStore.query(User, u =>
-      u.awsID('eq', userVar.attributes.sub),
-    );
-    const dbUser = dbUsers[0];
-    return setUser(dbUser);
-  };
 
   const viewWatchMatches = item => {
     //console.log('yay', item);
@@ -52,16 +44,11 @@ const MatchesScreen = () => {
 
   useEffect(() => {
     getFriendsList();
-  }, [user]);
-
-  useEffect(() => {
-    getCurrentUser();
-    //getFriendsList();
   }, []);
 
   return (
     <SafeAreaView style={styles.root}>
-
+      <Text>Welcome {user.username}!</Text>
       {friends? (<FlatList
         data={friends}
         keyExtractor={(item, index) => {

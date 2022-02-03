@@ -17,8 +17,9 @@ import {useEffect} from 'react/cjs/react.development';
 import {FriendshipUser, User, Friendship} from '../models';
 import {TextInput} from 'react-native-gesture-handler';
 // @refresh reset
-const FindFriendsScreen = () => {
-  const [user, setUser] = useState({});
+const FindFriendsScreen = props => {
+  //const [user, setUser] = useState({});
+  const user = props.route.params.user
   const [friends, setFriends] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -26,15 +27,6 @@ const FindFriendsScreen = () => {
   const [query, setQuery] = useState(null);
   const [friendRequests, setFriendRequests] = useState([]);
   const [userHasSearchedYet, setUserHasSearchedYet] = useState(false);
-
-  const getCurrentUser = async () => {
-    const userVar = await Auth.currentAuthenticatedUser();
-    const dbUsers = await DataStore.query(User, u =>
-      u.awsID('eq', userVar.attributes.sub),
-    );
-    const dbUser = dbUsers[0];
-    return setUser(dbUser);
-  };
 
   const getFriendsList = async () => {
     const usersFriendships = await DataStore.query(Friendship, f =>
@@ -139,7 +131,6 @@ const FindFriendsScreen = () => {
     let mounted = true 
     if (mounted) {
       setIsLoading(false);
-      getCurrentUser();
       setPotentialFriends([]);
       getfriendRequests();
       getFriendsList();
@@ -171,6 +162,7 @@ const FindFriendsScreen = () => {
   } else {
     return (
       <SafeAreaView style={styles.root}>
+                    <Text>Welcome {user.username}!</Text>
         {friendRequests.length > 0 ? (
           <View style ={styles.friendRequests}>
             <Text>New Friend Requests!</Text>

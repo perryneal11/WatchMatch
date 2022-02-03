@@ -5,27 +5,11 @@ import {Auth, DataStore} from 'aws-amplify'
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {User} from '../models'
 
-const ProfileScreen = () => {
-    const [user, setUser] = useState({})
+const ProfileScreen = props => {
+    //const [user, setUser] = useState({})
     const [netflix, setNetflix] = useState(true)
     const [prime, setPrime] = useState(true)
-
-    useEffect(() => {
-        const getCurrentUser = async ()=> {
-            const who = await Auth.currentAuthenticatedUser()
-            const dbUsers = await DataStore.query(User, u => u.awsID === who.attributes.sub)
-                if(dbUsers.length < 0) {
-                    return;
-                } else {
-                    const dbUser = dbUsers[0];
-                    setUser(dbUser)
-                    setNetflix(dbUser.Netflix)
-                    setPrime(dbUser.Prime)
-                }
-
-        }
-        getCurrentUser();
-    },[])
+    const user = props.route.params.user
 
     const signOut = async () => {
         try {
@@ -64,7 +48,7 @@ const ProfileScreen = () => {
             {console.log("hello", user)}
             <View style = {styles.container}>
 
-            <Text> </Text>
+            <Text>Welcome {user.username}!</Text>
             <Text> Streaming Services</Text>
             <Pressable style={styles.option}>
             <BouncyCheckbox 
