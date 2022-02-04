@@ -33,6 +33,31 @@ const HomeScreen = props => {
       overview: 'This is an overview',
       imdbID: 'tt9850360',
     },
+    {
+      title: 'movie4',
+      backdropPath: '/4EXqDG8MZOeDO01N18HEZZRTUvk.jpg',
+      overview: 'This is an overview',
+      imdbID: 'tt9850400',
+    },
+    {
+      title: 'movie5',
+      backdropPath: '/6CyILXa0BOm6HtV4naOjg5B2RRZ.jpg',
+      overview: 'This is an overview',
+      imdbID: 'tt9850410',
+    },
+    {
+      title: 'movie6',
+      backdropPath: '/5eZ8kRSlD8P8a42y9GEGl1yAqOb.jpg',
+      overview: 'This is an overview',
+      imdbID: 'tt9850420',
+    },
+    {
+      title: 'movie7',
+      backdropPath: '/rKzHtW1bdboA89FwiyRBNTY7edc.jpg',
+      overview: 'This is an overview',
+      imdbID: 'tt9850430',
+    },
+    
   ];
   const [movieData, setMovieData] = React.useState(testData);
   const [filteredData, setFilteredData] = React.useState([]);
