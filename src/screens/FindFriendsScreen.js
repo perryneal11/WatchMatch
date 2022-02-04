@@ -44,7 +44,7 @@ const FindFriendsScreen = props => {
     //console.log('rec', usersFriendships);
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
-    //console.log('wtf', friendsNoDuplicates);
+    console.log('wtf', friendsNoDuplicates);
     return setFriends(friendsNoDuplicates);
   };
 
@@ -55,16 +55,18 @@ const FindFriendsScreen = props => {
       User,
       u => u.username('contains', query.toLowerCase()),
     );
-    //console.log("results:", potentialFriendsVar)
-    //console.log("friends:", friends)
-    //console.log("friends we filtrin", potentialFriendsVar.filter(u => friends.includes(u.awsID)));
+    console.log("results:", potentialFriendsVar)
+    console.log("friends:", friends)
+    friendsids = friends.map(p=>p.awsID)
+    console.log('friends ids', friendsids)
+    console.log("friends we filtrin", potentialFriendsVar.filter(u => friends.includes(u.awsID)));
     setUserHasSearchedYet(true);
     if (potentialFriendsVar.length > 0) {
       //console.log("hit")
       setIsLoading(false);
       setQuery('');
       return setPotentialFriends(
-        potentialFriendsVar.filter(u => !friends.includes(u.awsID) && u.username != user.username),
+        potentialFriendsVar.filter(u => !friendsids.includes(u.awsID) && u.username != user.username),
       );
     } else {
       setIsLoading(false);
