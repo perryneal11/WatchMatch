@@ -3,13 +3,13 @@ import {
   View,
   StyleSheet,
   Text,
-
   ActivityIndicator,
 } from 'react-native';
 import Card from '../component/ShowCard/';
 import AnimatedStack from '../component/AnimatedStack/';
 import {Auth, DataStore} from 'aws-amplify';
 import TopRow from '../component/ButtonBars/topRow';
+import {User} from '../models';
 
 import {SafeAreaView} from 'react-native-safe-area-context';
 
@@ -74,28 +74,42 @@ const HomeScreen = props => {
     return setUser(dbUser);
   };
 
-  const filterMovieData = async () => {
+
+  
+
+  const filterMovieData = () => {
     if (user) {
-      console.log('user', user);
-      const likedMovies = user.approvedContentIMDBID;
-      console.log('liked movies ', likedMovies);
-      const dislikedMovies = user.unapprovedContentIMDBID;
-      console.log('disliked movies ', dislikedMovies);
-      if (likedMovies != null || dislikedMovies != null) {
-        console.log('if a  ');
+      //console.log('user', user);
+      const likedMovies = []
+      user.approvedContentIMDBID.forEach(o => {
+        //console.log("object", o)
+        likedMovies.push(JSON.parse(o))
+      })
+      const likedMoviesimdbids = likedMovies.map(m=>m.imdbID)
+      console.log("likedMoviesimdbids", likedMoviesimdbids)
+
+      const dislikedMovies = []
+      user.unapprovedContentIMDBID.forEach(o => {
+        //console.log("object", o)
+        dislikedMovies.push(JSON.parse(o))
+      })
+      const dislikedMoviesimdbids = dislikedMovies.map(m=>m.imdbID)
+      console.log("dislikedMoviesimdbids", dislikedMoviesimdbids)
+
+      if (likedMovies != null && dislikedMovies != null) {
         console.log(
           'filtered ',
           movieData.filter(
             item =>
-              !likedMovies.includes(item.imdbID) &&
-              !dislikedMovies.includes(item.imdbID),
+              !likedMoviesimdbids.includes(item.imdbID) &&
+              !dislikedMoviesimdbids.includes(item.imdbID),
           ),
         );
         return setFilteredData(
           movieData.filter(
             item =>
-              !likedMovies.includes(item.imdbID) &&
-              !dislikedMovies.includes(item.imdbID),
+              !likedMoviesimdbids.includes(item.imdbID) &&
+              !dislikedMoviesimdbids.includes(item.imdbID),
           ),
         );
       } else console.log('b');
@@ -137,7 +151,7 @@ const HomeScreen = props => {
 
   useEffect(() => {
     filterMovieData(movieData);
-  }, [user]);
+  }, [movieData]);
 
   useEffect(() => {
     setIsLoading(true);

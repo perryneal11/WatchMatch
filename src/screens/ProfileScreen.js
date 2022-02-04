@@ -6,7 +6,6 @@ import BouncyCheckbox from "react-native-bouncy-checkbox";
 import {User} from '../models'
 
 const ProfileScreen = props => {
-    //const [user, setUser] = useState({})
     const [netflix, setNetflix] = useState(true)
     const [prime, setPrime] = useState(true)
     const [isLoading, setIsLoading] = useState(false);
@@ -43,6 +42,11 @@ const ProfileScreen = props => {
             Alert.alert("New user created")
         }
     };
+
+    useEffect(()=>{
+        setNetflix(user.Netflix)
+        setPrime(user.Prime)
+    },[])
     
     return(
         <SafeAreaView style = {styles.root}>

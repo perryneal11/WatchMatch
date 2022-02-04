@@ -49,8 +49,7 @@ const App = () => {
                 const dbUser = dbUsers[0];
                 setUser(dbUser)
  
-                //setNetflix(dbUser.Netflix)
-                //setPrime(dbUser.Prime)
+               
             }
 
     }
@@ -65,10 +64,10 @@ console.log("user from app", user)
       <View style={styles.pageContainer}>
         {user != null ? ( <Stack.Navigator initialRouteName='Home'>
           <Stack.Screen name="Home" component = {HomeScreen} initialParams={{'user': user}} ></Stack.Screen>
-          <Stack.Screen name="Matches" component = {MatchesScreen} initialParams={{'user': user}} options = {headerBackVisible = false}></Stack.Screen>
-          <Stack.Screen name="FindFriends" component = {FindFriendsScreen} initialParams={{'user': user}} options = {headerBackVisible = false}></Stack.Screen>
-          <Stack.Screen name="Profile" component = {ProfileScreen} initialParams={{'user': user}} options = {headerBackVisible = false}></Stack.Screen>
-          <Stack.Screen name="WatchMatches" component = {WatchMatchesScreen} initialParams={{'user': user}} options = {headerBackVisible = false}></Stack.Screen>
+          <Stack.Screen name="Matches" component = {MatchesScreen} initialParams={{'user': user}} ></Stack.Screen>
+          <Stack.Screen name="FindFriends" component = {FindFriendsScreen} initialParams={{'user': user}} ></Stack.Screen>
+          <Stack.Screen name="Profile" component = {ProfileScreen} initialParams={{'user': user}} ></Stack.Screen>
+          <Stack.Screen name="WatchMatches" component = {WatchMatchesScreen} initialParams={{'user': user}} ></Stack.Screen>
 
         </Stack.Navigator>):(<Text>No user</Text>)}
        
