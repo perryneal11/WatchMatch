@@ -9,30 +9,42 @@ const WatchMatchesScreen = ({route, navigation}) => {
   const [currentMovie, setCurrentMovie] = React.useState();
 
   const getShowsInCommon = () => {
-    const friendsShows = friend.friend.approvedContentIMDBID;
-    console.log('friends shows', friendsShows);
-    const usersShows = route.params.user.approvedContentIMDBID;
-    console.log('your shows', usersShows);
+    const combinedShows = []
+    const usersShows = []
+    const friendsShows = []
+
+    friend.friend.approvedContentIMDBID.forEach(o => {
+        //console.log("friend", o)
+        friendsShows.push(JSON.parse(o))
+        combinedShows.push(JSON.parse(o))
+      })
+
+    route.params.user.approvedContentIMDBID.forEach(o => {
+        //console.log("user", o)
+        usersShows.push(JSON.parse(o))
+        combinedShows.push(JSON.parse(o))
+      })
+
+    //console.log("combined shows", combinedShows)
+
+    const usersShowsImdbids = usersShows.map(s=>s.imdbID)   
+    const friendsShowsImdbids = friendsShows.map(s=>s.imdbID)  
+    const combinedShowsImdbids = combinedShows.map(s=>s.imdbID)
+    console.log("combinedShowsImdbids",combinedShowsImdbids)
+    console.log("usersShowsImdbids",usersShowsImdbids)
+    console.log("friendsShowsImdbids",friendsShowsImdbids)
+
+      const combined = combinedShows.filter(
+        s => friendsShowsImdbids.includes(s.imdbID) && usersShowsImdbids.includes(s.imdbID)
+      )
+
+    console.log("combined", combined, typeof combined)
+
+
     if (friendsShows != null || friendsShows.length != 0 && usersShows != null || usersShows.length != 0) {
-      const combined = usersShows.concat(friendsShows);
-      console.log('combined', combined);
-
-
-      combined.forEach(element => {
-        console.log('element', element, "in: ", usersShows, "? is", usersShows.includes(element));
-        console.log('element', element, "in: ", friendsShows, "? is", friendsShows.includes(element));
-
-      });
-
-      //console.log('combined', combined, typeof combined);
-      const showsNoDuplicates = [...new Set(combined)];
+      const showsNoDuplicates = Array.from(new Set(combined));
       console.log('showsNoDuplicates', showsNoDuplicates, typeof showsNoDuplicates);
-      const showsYouBothLike = showsNoDuplicates.filter(
-        s => friendsShows.includes(s) && usersShows.includes(s),
-      ).flat();
-      console.log('showsYouBothLike', showsYouBothLike, typeof showsYouBothLike);
-  
-      return setShows(showsYouBothLike)
+      return setShows(showsNoDuplicates)
     }
     else return 
   };
