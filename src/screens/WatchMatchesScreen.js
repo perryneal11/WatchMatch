@@ -51,10 +51,12 @@ const WatchMatchesScreen = ({route, navigation}) => {
 
   const onSwipeLeft = currentMovie => {
     console.log("left")
+
   };
 
   const onSwipeRight = currentMovie => {
-    console.log("right")
+    console.log("right", shows)
+    setShows(shows)
   };
 
   useEffect(() => {
@@ -73,7 +75,8 @@ const WatchMatchesScreen = ({route, navigation}) => {
             )}
           onSwipeLeft={onSwipeLeft}
           onSwipeRight={onSwipeRight}
-          setCurrentMovie={setCurrentMovie}>
+          setCurrentMovie={setCurrentMovie}
+          resetFlag={true}>
           </AnimatedStack>
       </View>
       ):(<Text>No shows you both like</Text>)}

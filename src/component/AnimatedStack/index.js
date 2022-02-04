@@ -14,7 +14,7 @@ import Like from '../../../assets/images/LIKE.png'
 import Nope from '../../../assets/images/nope.png'
 
 const AnimatedStack = props => {
-  const { data, renderItem, onSwipeLeft, onSwipeRight, setCurrentMovie } = props;
+  const { data, renderItem, onSwipeLeft, onSwipeRight, setCurrentMovie, resetFlag } = props;
   const [currentIndex, setCurrentIndex] = useState(0)
   const [nextIndex, setNextIndex] = useState(currentIndex + 1)
   const nextProfile = data[nextIndex]
@@ -78,6 +78,9 @@ const AnimatedStack = props => {
   useEffect(() => {
     translateX.value = 0
     setNextIndex(currentIndex + 1);
+    if (nextProfile == null && props.resetFlag == true) {
+      setCurrentIndex(0)
+    }
   },[currentIndex, translateX])
 
   useEffect(() => {
