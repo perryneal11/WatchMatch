@@ -30,33 +30,32 @@ const WatchMatchesScreen = ({route, navigation}) => {
     const usersShowsImdbids = usersShows.map(s=>s.imdbID)   
     const friendsShowsImdbids = friendsShows.map(s=>s.imdbID)  
     const combinedShowsImdbids = combinedShows.map(s=>s.imdbID)
-    console.log("combinedShowsImdbids",combinedShowsImdbids)
-    console.log("usersShowsImdbids",usersShowsImdbids)
-    console.log("friendsShowsImdbids",friendsShowsImdbids)
+    //console.log("combinedShowsImdbids",combinedShowsImdbids)
+    //console.log("usersShowsImdbids",usersShowsImdbids)
+    //console.log("friendsShowsImdbids",friendsShowsImdbids)
 
       const combined = combinedShows.filter(
         s => friendsShowsImdbids.includes(s.imdbID) && usersShowsImdbids.includes(s.imdbID)
       )
 
-    console.log("combined", combined, typeof combined)
+    //console.log("combined", combined, typeof combined)
 
 
     if (friendsShows != null || friendsShows.length != 0 && usersShows != null || usersShows.length != 0) {
       const showsNoDuplicates = Array.from(new Set(combined));
-      console.log('showsNoDuplicates', showsNoDuplicates, typeof showsNoDuplicates);
+      //console.log('showsNoDuplicates', showsNoDuplicates, typeof showsNoDuplicates);
       return setShows(showsNoDuplicates)
     }
     else return 
   };
 
   const onSwipeLeft = currentMovie => {
-    console.log("left")
+    //console.log("left")
 
   };
 
   const onSwipeRight = currentMovie => {
-    console.log("right", shows)
-    setShows(shows)
+    //console.log("right", shows)
   };
 
   useEffect(() => {
