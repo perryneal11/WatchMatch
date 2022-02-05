@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-around',
       width: '100%',
       padding: 10,
+      
     },});
  
 export default TopRow;

@@ -80,6 +80,7 @@ console.log("user from app", user)
 const styles = StyleSheet.create({
   root: {
     flex: 1
+    
   },
   pageContainer: {
     flex: 1,
