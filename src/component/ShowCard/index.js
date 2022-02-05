@@ -21,18 +21,10 @@ const Card = props => {
 };
 
 const styles = StyleSheet.create({
-
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-    overflow: 'hidden',
-    justifyContent: 'flex-end',
-  },
   card: {
-    backgroundColor: 'white',
+    backgroundColor: 'green',
     width: '100%',
-    height: '100%',
+    height: '120%',
     borderRadius: 10,
     shadowColor: '#000',
     shadowOffset: {
@@ -44,6 +36,15 @@ const styles = StyleSheet.create({
 
     elevation: 17,
   },
+
+  image: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
+    overflow: 'hidden',
+    justifyContent: 'flex-end',
+  },
+  
   name: {
     fontSize: 30,
     color: 'white',
