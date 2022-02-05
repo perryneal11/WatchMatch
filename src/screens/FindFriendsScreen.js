@@ -339,10 +339,11 @@ const styles = StyleSheet.create({
   queryArea: {
     flexDirection: 'column',
     alignItems: 'center',
+    flex: 1
   },
   textInput: {
     height: 25,
-    width: '100%',
+    width: '90%',
     backgroundColor: '#fff',
     paddingHorizontal: 20,
     borderRadius: 10,
@@ -354,8 +355,8 @@ const styles = StyleSheet.create({
 
   searchButton: {
     backgroundColor: '#D6173c',
-    height: '20%',
-    width: '100%',
+    height: 40,
+    width: '90%',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
@@ -363,8 +364,8 @@ const styles = StyleSheet.create({
     padding: 5,
   },
   find: {
-    flex: 4,
-    flexDirection: "column"
+    flex: 3,
+    flexDirection: "column",
   },
   noResultsContainer:{
     flex: 1,
@@ -377,14 +378,20 @@ const styles = StyleSheet.create({
   },
   listItem: {
     width: '100%',
-    borderColor: 'red',
-    borderWidth: 2,
+    borderColor: 'black',
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
     flex: 1,
     flexDirection: 'row',
-    alignContent: 'center',
+    alignItems: 'center',
     justifyContent: 'space-between',
     borderRadius: 5,
     margin: 10,
+    padding:5
+  },
+  title:{
+    fontSize: 20,
+    textAlign: 'left'
   },
   image: {
     width: '100%',
