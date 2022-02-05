@@ -172,7 +172,6 @@ const FindFriendsScreen = props => {
   } else {
     return (
       <SafeAreaView style={styles.root}>
-        <Text>Welcome {user.username}!</Text>
         {friendRequests.length > 0 ? (
           <View style={styles.friendRequestContainer}>
             <Text style={styles.friendRequestTitle}>New Friend Requests!</Text>
@@ -353,7 +352,7 @@ const styles = StyleSheet.create({
 
   searchButton: {
     backgroundColor: '#D6173c',
-    height: 25,
+    height: '20%',
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',

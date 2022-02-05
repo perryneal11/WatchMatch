@@ -73,7 +73,6 @@ const MatchesScreen = props => {
   } else {
     return (
       <SafeAreaView style={styles.root}>
-        <Text>Welcome {user.username}!</Text>
         {friends != null ? (
           <FlatList
             data={friends}
@@ -126,9 +125,10 @@ const styles = StyleSheet.create({
   },
   listItem: {
     flex: 7,
-    borderRadius: 70,
-    borderColor: 'red',
-    borderWidth: 2,
+    borderTopColor: 'grey',
+    borderBottomColor: 'grey',
+    borderTopWidth: .01,
+    borderBottomWidth:1,
     margin: 3,
     padding: 20,
     flexDirection: 'row',
