@@ -11,6 +11,7 @@ import {
   Alert,
   Pressable,
 } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import TopRow from '../component/ButtonBars/topRow';
 import {Auth, DataStore, Predicates} from 'aws-amplify';
 import {useEffect} from 'react/cjs/react.development';
@@ -19,7 +20,7 @@ import {TextInput} from 'react-native-gesture-handler';
 // @refresh reset
 const FindFriendsScreen = props => {
   //const [user, setUser] = useState({});
-  const user = props.route.params.user
+  const user = props.route.params.user;
   const [friends, setFriends] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -41,32 +42,47 @@ const FindFriendsScreen = props => {
 
     const receivers = usersFriendships.map(f => f.Receiver);
     const senders = usersFriendships.map(f => f.Sender);
-    //console.log('rec', usersFriendships);
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
-    console.log('wtf', friendsNoDuplicates);
+    console.log('friendsNoDuplicates', friendsNoDuplicates.map(i=>i.awsID));
     return setFriends(friendsNoDuplicates);
   };
 
   const search = async () => {
     setIsLoading(true);
     //console.log('query', query);
-    var potentialFriendsVar = await DataStore.query(
-      User,
-      u => u.username('contains', query.toLowerCase()),
+    var potentialFriendsVar = await DataStore.query(User, u =>
+      u.username('contains', query.toLowerCase()),
     );
-    console.log("results:", potentialFriendsVar)
-    console.log("friends:", friends)
-    friendsids = friends.map(p=>p.awsID)
-    console.log('friends ids', friendsids)
-    console.log("friends we filtrin", potentialFriendsVar.filter(u => friends.includes(u.awsID)));
+    console.log('results:', potentialFriendsVar.map(i=>i.awsID));
+    var friendsids = friends.map(p => p.awsID);
+    console.log('friends ids', friendsids);
+    console.log(
+      'friends we filtered',
+      potentialFriendsVar.filter(u=>!friendsids.includes(u.awsID) && u.username != user.username && u.requestAccepted == true)
+    );
+
     setUserHasSearchedYet(true);
     if (potentialFriendsVar.length > 0) {
-      //console.log("hit")
+      console.log("hit")
       setIsLoading(false);
       setQuery('');
+      console.log('heres what were passing to filter:', potentialFriendsVar.map(i=>i.awsID));
+
+      potentialFriendsVar.forEach(u=>{
+        console.log(!friendsids.includes(u.awsID) && u.username != user.username)
+        console.log(u.username != user.username)
+        console.log(!friendsids.includes(u.awsID))
+        && u.username != user.username && u.requestAccepted == true
+      })
+
+
+      console.log('and results',potentialFriendsVar.filter(u => !friendsids.includes(u.awsID) && u.username != user.username));
+
       return setPotentialFriends(
-        potentialFriendsVar.filter(u => !friendsids.includes(u.awsID) && u.username != user.username),
+        potentialFriendsVar.filter(
+          u => !friendsids.includes(u.awsID) && u.username != user.username
+        ),
       );
     } else {
       setIsLoading(false);
@@ -112,35 +128,29 @@ const FindFriendsScreen = props => {
   };
 
   useEffect(() => {
-    let mounted = true 
+    let mounted = true;
 
-    if(mounted){
-
-    getfriendRequests();
-    }
-    else{
-      console.log("mounting issue")
+    if (mounted) {
+      getfriendRequests();
+    } else {
+      console.log('mounting issue');
     }
 
-    
-    return () => mounted = false
-
+    return () => (mounted = false);
   }, [friendRequests]);
 
   useEffect(() => {
-    let mounted = true 
+    let mounted = true;
     if (mounted) {
       setIsLoading(false);
       setPotentialFriends([]);
       getfriendRequests();
       getFriendsList();
-    } 
-    else {
-      console.log("mounting issue")
+    } else {
+      console.log('mounting issue');
     }
 
-    return () => mounted = false
-
+    return () => (mounted = false);
   }, []);
 
   if (isLoading) {
@@ -162,10 +172,10 @@ const FindFriendsScreen = props => {
   } else {
     return (
       <SafeAreaView style={styles.root}>
-                    <Text>Welcome {user.username}!</Text>
+        <Text>Welcome {user.username}!</Text>
         {friendRequests.length > 0 ? (
-          <View style ={styles.friendRequests}>
-            <Text>New Friend Requests!</Text>
+          <View style={styles.friendRequestContainer}>
+            <Text style={styles.friendRequestTitle}>New Friend Requests!</Text>
             <FlatList
               data={friendRequests}
               keyExtractor={(item, index) => {
@@ -173,14 +183,28 @@ const FindFriendsScreen = props => {
               }}
               renderItem={({item}) => (
                 <View style={styles.friendRequest}>
-                  <Text style={styles.friendRequestUsername}>{item.Sender.username}</Text>
-                  <View>
-                    <Pressable
-                      onPress={() => acceptFriendRequest(item)}
-                      style={styles.acceptButton}>
-                        <Text>+</Text>
-                      </Pressable>
+                  <View style={styles.userPicContainer}>
+                    <Image
+                      style={styles.userPic}
+                      source={{
+                        uri: 'https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_960_720.png',
+                      }}
+                    />
                   </View>
+                  <View style={styles.friendRequestUsernameContainer}>
+                    <Text style={styles.friendRequestUsername}>
+                      {item.Sender.username}
+                    </Text>
+                  </View>
+
+                  <Pressable
+                    onPress={() => acceptFriendRequest(item)}
+                    style={styles.acceptButtonContainer}>
+                    <AntDesign
+                      size={40}
+                      name="adduser"
+                      style={styles.acceptButton}></AntDesign>
+                  </Pressable>
                 </View>
               )}
             />
@@ -189,50 +213,66 @@ const FindFriendsScreen = props => {
           <></>
         )}
 
-        <View></View>
-        <TextInput
-          onChangeText={newQuery => {
-            setQuery(newQuery), setPotentialFriends([]);
-          }}
-          style={styles.textInput}
-        />
-        <Pressable
-          onPress={() => search(query)}
-          disabled={!query}
-          style={styles.button}>
-          <Text>Search</Text>
-        </Pressable>
-
-        {!userHasSearchedYet && potentialFriends.length == 0 ? (
-          <Text></Text>
-        ) : (
-          <Text style={styles.find}> No results</Text>
-        )}
-        {potentialFriends ? (
-          <FlatList
-            data={potentialFriends}
-            keyExtractor={(item, index) => {
-              return item.id;
+        <View style={styles.queryArea}>
+          <TextInput
+            onChangeText={newQuery => {
+              setQuery(newQuery), setPotentialFriends([]);
             }}
-            renderItem={({item}) => (
-              <View style={styles.listItem}>
-                <Image />
-                <View style={styles.metaInfo}>
-                  <Text style={styles.title}>{item.username}</Text>
-                </View>
-                <View>
-                  <Button
-                    title="Add"
-                    style={styles.button}
-                    onPress={() => sendFriendRequest(item)}></Button>
-                </View>
-              </View>
-            )}
+            style={styles.textInput}
           />
-        ) : (
-          <Text>No Users Found</Text>
-        )}
+          <Pressable
+            onPress={() => search(query)}
+            disabled={!query}
+            style={styles.searchButton}>
+            <Text>Search</Text>
+          </Pressable>
+        </View>
 
+
+
+
+
+        {console.log("yo", !userHasSearchedYet , potentialFriends.length == 0)}
+        {userHasSearchedYet && potentialFriends.length > 0 ? (
+          <View  style={styles.find}>
+            <FlatList
+              data={potentialFriends}
+              keyExtractor={(item, index) => {
+                return item.id;
+              }}
+              renderItem={({item}) => (
+                <View style={styles.listItem}>
+                  <Image style={styles.userPic} source={{uri: 'https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_960_720.png'}} />
+                  <View style={styles.usernameContainer}>
+                    <Text style={styles.title}>{item.username}</Text>
+                  </View>
+                  
+                  <View>
+          
+                  <Pressable
+                    onPress={() => sendFriendRequest(item)}
+                    style={styles.acceptButtonContainer}>
+                    <AntDesign
+                      size={40}
+                      name="adduser"
+                      style={styles.acceptButton}></AntDesign>
+                  </Pressable>
+
+                  </View>
+                </View>
+              )}
+            />
+          </View>
+        ) 
+        
+        
+        
+        : (
+          <View style={styles.noResultsContainer}>
+            <Text style={styles.noResults}>No results</Text>
+          </View>
+        )}
+        
         <TopRow screen="FRIENDS"></TopRow>
       </SafeAreaView>
     );
@@ -241,17 +281,77 @@ const FindFriendsScreen = props => {
 
 const styles = StyleSheet.create({
   root: {
-    width: '100%',
     flex: 1,
     padding: 10,
   },
+  friendRequestContainer: {
+    flexDirection: 'column',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  friendRequestTitle: {
+    fontSize: 20,
+    textAlign: 'center',
+    padding: 5,
+  },
+  friendRequest: {
+    flex: 4,
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#Ead907',
+    borderRadius: 5,
+    margin: 10,
+  },
+  userPicContainer: {
+    flex: 2,
+    justifyContent: 'center',
+    margin: 5,
+  },
+  userPic: {
+    height: 50,
+    width: 50,
+    borderRadius: 50 / 2,
+  },
+  friendRequestUsernameContainer: {
+    fontSize: 20,
+    flex: 2,
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  friendRequestUsername: {
+    fontSize: 20,
+  },
+  acceptButtonContainer: {
+    flex: 1,
+    backgroundColor: '#Eeff00',
+    height: 50,
+    width: 50,
+    borderRadius: 50 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 10,
+  },
+  acceptButton: {},
   users: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    backgroundColor: 'blue',
-    
   },
-  button: {
+  queryArea: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  textInput: {
+    height: 25,
+    width: '100%',
+    backgroundColor: '#fff',
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    height: 40,
+    margin: 10,
+  },
+
+  searchButton: {
     backgroundColor: '#D6173c',
     height: 25,
     width: '100%',
@@ -259,66 +359,36 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     margin: 10,
-  },
-  acceptButton: {
-    backgroundColor: '#87CEEB',
-    height: 25,
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 20,
-    borderColor: 'black',
-    margin: 10,
+    padding: 5,
   },
   find: {
+    flex: 4,
+    flexDirection: "column"
+  },
+  noResultsContainer:{
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    textAlign: 'center',
-    backgroundColor: 'orange',
-    flex: 1,
   },
-  user: {
-    width: 100,
-    height: 100,
-    margin: 10,
+  noResults: {
+    fontSize: 20,
+
+  },
+  listItem: {
+    width: '100%',
+    borderColor: 'red',
     borderWidth: 2,
-    borderRadius: 50,
-    borderColor: 'black',
-    backgroundColor: 'orange',
-    
-    padding: 3,
+    flex: 1,
+    flexDirection: 'row',
+    alignContent: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 5,
+    margin: 10,
   },
   image: {
     width: '100%',
     height: '100%',
     borderRadius: 50,
-    backgroundColor: 'orange',
-    
-  },
-  listItem: {
-    borderColor: 'black',
-    borderWidth: 3,
-    margin: 3,
-    backgroundColor: 'orange',
-    
-  },
-  textInput: {
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    height: 40,
-    margin: 10,
-  },
-  friendRequest: {
-    flexDirection: 'row',
-    alignContent: 'space-between',
-  },
-  friendRequests: {
-    flexDirection: 'column',
-    backgroundColor: 'yellow',
-    borderRadius: 20,
-  },
-  friendRequestUsername:{
   },
 });
 
