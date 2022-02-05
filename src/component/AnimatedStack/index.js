@@ -56,7 +56,7 @@ const AnimatedStack = props => {
   const gestureHandler = useAnimatedGestureHandler({
     onStart: (_, context) => {
       context.startX = translateX.value
-      console.log('touch start');
+      //console.log('touch start');
     },
     onActive: (event, context) => {
       translateX.value = context.startX + event.translationX;

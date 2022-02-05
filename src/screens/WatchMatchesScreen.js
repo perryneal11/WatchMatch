@@ -43,15 +43,15 @@ const WatchMatchesScreen = ({route, navigation}) => {
 
     if (friendsShows != null || friendsShows.length != 0 && usersShows != null || usersShows.length != 0) {
       const showsNoDuplicates = Array.from(new Set(combined.flat()));
-      console.log('showsNoDuplicates', showsNoDuplicates, typeof showsNoDuplicates);
+      //console.log('showsNoDuplicates', showsNoDuplicates, typeof showsNoDuplicates);
 
-      showsNoDuplicates.forEach(item=>{
-        console.log(item, item != null)
-        console.log(item, item.length != 0)
-      })
+      //showsNoDuplicates.forEach(item=>{
+      //  console.log(item, item != null)
+      //  console.log(item, item.length != 0)
+      //})
 
       var showsNoDuplicatesNoEmpties = showsNoDuplicates.filter(el=> el != null && el.length != 0);
-      console.log('showsNoDuplicatesNoEmpties', showsNoDuplicatesNoEmpties, typeof showsNoDuplicatesNoEmpties);
+      //console.log('showsNoDuplicatesNoEmpties', showsNoDuplicatesNoEmpties, typeof showsNoDuplicatesNoEmpties);
       return setShows(showsNoDuplicates)
     }
     else return 
@@ -69,7 +69,6 @@ const WatchMatchesScreen = ({route, navigation}) => {
   useEffect(() => {
     getShowsInCommon();
   },[]);
-  {console.log("shows", shows)}
   return (
 
     <SafeAreaView style={styles.pageContainer}>
