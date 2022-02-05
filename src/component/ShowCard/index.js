@@ -2,12 +2,11 @@ import React from 'react';
 import {Text, View, ImageBackground, StyleSheet} from 'react-native';
 
 const Card = props => {
-  const {title, url, overview} = props.movie;
+  const {title, url, overview, movie} = props.movie;
 
-  
   const image =  "https://image.tmdb.org/t/p/w300/" + props.movie.backdropPath
   //const image = "https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,h_465,q_auto,w_310/v1638549265/amc-cdn/production/2/movies/66500/66520/PosterDynamic/132670.jpg"
-  console.log("hello there", props.movie.backdropPath, typeof props.movie)
+  console.log("hello there", image, typeof props.movie)
   
   return (
     <View style={styles.card}>

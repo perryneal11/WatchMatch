@@ -42,8 +42,16 @@ const WatchMatchesScreen = ({route, navigation}) => {
 
 
     if (friendsShows != null || friendsShows.length != 0 && usersShows != null || usersShows.length != 0) {
-      const showsNoDuplicates = Array.from(new Set(combined));
-      //console.log('showsNoDuplicates', showsNoDuplicates, typeof showsNoDuplicates);
+      const showsNoDuplicates = Array.from(new Set(combined.flat()));
+      console.log('showsNoDuplicates', showsNoDuplicates, typeof showsNoDuplicates);
+
+      showsNoDuplicates.forEach(item=>{
+        console.log(item, item != null)
+        console.log(item, item.length != 0)
+      })
+
+      var showsNoDuplicatesNoEmpties = showsNoDuplicates.filter(el=> el != null && el.length != 0);
+      console.log('showsNoDuplicatesNoEmpties', showsNoDuplicatesNoEmpties, typeof showsNoDuplicatesNoEmpties);
       return setShows(showsNoDuplicates)
     }
     else return 
@@ -61,8 +69,9 @@ const WatchMatchesScreen = ({route, navigation}) => {
   useEffect(() => {
     getShowsInCommon();
   },[]);
- 
+  {console.log("shows", shows)}
   return (
+
     <SafeAreaView style={styles.pageContainer}>
     <Text style = {styles.header}>Shows for you and {friend.friend.username} </Text>
       {shows? (
@@ -70,7 +79,7 @@ const WatchMatchesScreen = ({route, navigation}) => {
           <AnimatedStack
             data={shows}
             renderItem={({item}) => (
-              <Card movie={item} image={item.backdropPath} />
+              <Card movie={item}  />
             )}
           onSwipeLeft={onSwipeLeft}
           onSwipeRight={onSwipeRight}

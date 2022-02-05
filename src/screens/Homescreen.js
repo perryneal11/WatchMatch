@@ -10,7 +10,6 @@ import AnimatedStack from '../component/AnimatedStack/';
 import {Auth, DataStore} from 'aws-amplify';
 import TopRow from '../component/ButtonBars/topRow';
 import {User} from '../models';
-
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const HomeScreen = props => {
@@ -63,7 +62,6 @@ const HomeScreen = props => {
   const [filteredData, setFilteredData] = React.useState([]);
   const [currentMovie, setCurrentMovie] = React.useState();
   const [isLoading, setIsLoading] = useState(false);
-  //const [user, setUser] = React.useState({});
   const user = props.route.params.user
 
   const fetchData = async () => {
@@ -89,13 +87,13 @@ const HomeScreen = props => {
 
   const getCurrentUser = async () => {
     const userVar = await Auth.currentAuthenticatedUser();
-    console.log('user in get current user', userVar.attributes);
+    //console.log('user in get current user', userVar.attributes);
     const dbUsers = await DataStore.query(User, u =>
       u.awsID('eq', userVar.attributes.sub),
     );
-    console.log('dbusers', dbUsers);
+    //console.log('dbusers', dbUsers);
     const dbUser = dbUsers[0];
-    console.log('dbuser', dbUser);
+    //console.log('dbuser', dbUser);
     return setUser(dbUser);
   };
 
@@ -111,7 +109,7 @@ const HomeScreen = props => {
         likedMovies.push(JSON.parse(o))
       })
       const likedMoviesimdbids = likedMovies.map(m=>m.imdbID)
-      console.log("likedMoviesimdbids", likedMoviesimdbids)
+      //console.log("likedMoviesimdbids", likedMoviesimdbids)
 
       const dislikedMovies = []
       user.unapprovedContentIMDBID.forEach(o => {
@@ -119,17 +117,10 @@ const HomeScreen = props => {
         dislikedMovies.push(JSON.parse(o))
       })
       const dislikedMoviesimdbids = dislikedMovies.map(m=>m.imdbID)
-      console.log("dislikedMoviesimdbids", dislikedMoviesimdbids)
+      //console.log("dislikedMoviesimdbids", dislikedMoviesimdbids)
 
       if (likedMovies != null && dislikedMovies != null) {
-        console.log(
-          'filtered ',
-          movieData.filter(
-            item =>
-              !likedMoviesimdbids.includes(item.imdbID) &&
-              !dislikedMoviesimdbids.includes(item.imdbID),
-          ),
-        );
+        //console.log('filtered ',movieData.filter(item =>!likedMoviesimdbids.includes(item.imdbID) &&!dislikedMoviesimdbids.includes(item.imdbID),),);
         return setFilteredData(
           movieData.filter(
             item =>
@@ -137,13 +128,14 @@ const HomeScreen = props => {
               !dislikedMoviesimdbids.includes(item.imdbID),
           ),
         );
-      } else console.log('b');
+      } else 
+      //console.log('b');
       return setFilteredData(movieData);
     }
   };
 
   const save = async (newIMDBID, approved) => {
-    console.log('SAVING', currentMovie.imdbID);
+    //console.log('SAVING', currentMovie.imdbID);
     const updateUser = User.copyOf(user, updated => {
       if (approved == true) {
         if (updated.approvedContentIMDBID == null) {
@@ -180,12 +172,11 @@ const HomeScreen = props => {
 
   useEffect(() => {
     setIsLoading(true);
-    console.log("user from home", props.route.params.user.username)
+    //console.log("user from home", props.route.params.user.username)
     //fetchData()
     //getCurrentUser();
     filterMovieData(movieData);
   }, []);
-
   return (
     <SafeAreaView style={styles.pageContainer}>
                   {isLoading ? (
@@ -198,7 +189,7 @@ const HomeScreen = props => {
             <AnimatedStack
               data={filteredData}
               renderItem={({item}) => (
-                <Card movie={item} image={item.backdropPath} />
+                <Card movie={item}  />
               )}
               onSwipeLeft={onSwipeLeft}
               onSwipeRight={onSwipeRight}

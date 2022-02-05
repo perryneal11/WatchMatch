@@ -44,7 +44,7 @@ const FindFriendsScreen = props => {
     const senders = usersFriendships.map(f => f.Sender);
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
-    console.log('friendsNoDuplicates', friendsNoDuplicates.map(i=>i.awsID));
+    //console.log('friendsNoDuplicates', friendsNoDuplicates.map(i=>i.awsID));
     return setFriends(friendsNoDuplicates);
   };
 
@@ -54,30 +54,27 @@ const FindFriendsScreen = props => {
     var potentialFriendsVar = await DataStore.query(User, u =>
       u.username('contains', query.toLowerCase()),
     );
-    console.log('results:', potentialFriendsVar.map(i=>i.awsID));
+    //console.log('results:', potentialFriendsVar.map(i=>i.awsID));
     var friendsids = friends.map(p => p.awsID);
-    console.log('friends ids', friendsids);
-    console.log(
-      'friends we filtered',
-      potentialFriendsVar.filter(u=>!friendsids.includes(u.awsID) && u.username != user.username && u.requestAccepted == true)
-    );
+    //console.log('friends ids', friendsids);
+    //console.log('friends we filtered',potentialFriendsVar.filter(u=>!friendsids.includes(u.awsID) && u.username != user.username && u.requestAccepted == true));
 
     setUserHasSearchedYet(true);
     if (potentialFriendsVar.length > 0) {
-      console.log("hit")
+      //console.log("hit")
       setIsLoading(false);
       setQuery('');
-      console.log('heres what were passing to filter:', potentialFriendsVar.map(i=>i.awsID));
+      //console.log('heres what were passing to filter:', potentialFriendsVar.map(i=>i.awsID));
 
-      potentialFriendsVar.forEach(u=>{
-        console.log(!friendsids.includes(u.awsID) && u.username != user.username)
-        console.log(u.username != user.username)
-        console.log(!friendsids.includes(u.awsID))
-        && u.username != user.username && u.requestAccepted == true
-      })
+      //potentialFriendsVar.forEach(u=>{
+        //console.log(!friendsids.includes(u.awsID) && u.username != user.username)
+        //console.log(u.username != user.username)
+        //console.log(!friendsids.includes(u.awsID))
+        //&& u.username != user.username && u.requestAccepted == true
+      //})
 
 
-      console.log('and results',potentialFriendsVar.filter(u => !friendsids.includes(u.awsID) && u.username != user.username));
+      //console.log('and results',potentialFriendsVar.filter(u => !friendsids.includes(u.awsID) && u.username != user.username));
 
       return setPotentialFriends(
         potentialFriendsVar.filter(
@@ -231,7 +228,6 @@ const FindFriendsScreen = props => {
 
 
 
-        {console.log("yo", !userHasSearchedYet , potentialFriends.length == 0)}
         {userHasSearchedYet && potentialFriends.length > 0 ? (
           <View  style={styles.find}>
             <FlatList

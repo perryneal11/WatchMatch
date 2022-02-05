@@ -28,7 +28,7 @@ const ProfileScreen = props => {
       await DataStore.clear;
       Auth.signOut();
     } catch (error) {
-      console.log('error signing out: ', error);
+      //console.log('error signing out: ', error);
     }
   };
 
@@ -60,7 +60,6 @@ const ProfileScreen = props => {
 
   return (
     <SafeAreaView style={styles.root}>
-      {console.log('hello', user)}
 
       <View style={styles.userPicContainer}>
         <Image

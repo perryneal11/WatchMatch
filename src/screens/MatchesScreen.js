@@ -44,10 +44,10 @@ const MatchesScreen = props => {
 
     const receivers = usersFriendships.map(f => f.Receiver);
     const senders = usersFriendships.map(f => f.Sender);
-    console.log('rec', usersFriendships);
+    //console.log('rec', usersFriendships);
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
-    console.log('wtf', friendsNoDuplicates);
+    //console.log('wtf', friendsNoDuplicates);
     setIsLoading(false);
     return setFriends(friendsNoDuplicates);
   };
@@ -57,9 +57,9 @@ const MatchesScreen = props => {
     if (mounted) {
       setIsLoading(true);
       getFriendsList();
-      console.log('hw;eoifhweoifh', friends != null);
+      //console.log('hw;eoifhweoifh', friends != null);
     } else {
-      console.log('mounting issue');
+      //console.log('mounting issue');
     }
     return () => (mounted = false);
   }, []);
