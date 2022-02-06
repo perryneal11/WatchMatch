@@ -66,7 +66,7 @@ console.log("user from app", user)
           <Stack.Screen name="Home" component = {HomeScreen} initialParams={{'user': user}} ></Stack.Screen>
           <Stack.Screen name="Matches" component = {MatchesScreen} initialParams={{'user': user}} ></Stack.Screen>
           <Stack.Screen name="FindFriends" component = {FindFriendsScreen} initialParams={{'user': user}} ></Stack.Screen>
-          <Stack.Screen name="Profile" component = {ProfileScreen} initialParams={{'user': user}} ></Stack.Screen>
+          <Stack.Screen name="Profile" component = {ProfileScreen} initialParams={{'user': user}} getCurrentUser = {this.getCurrentUser} ></Stack.Screen>
           <Stack.Screen name="WatchMatches" component = {WatchMatchesScreen} initialParams={{'user': user}} ></Stack.Screen>
 
         </Stack.Navigator>):(<Text>No user</Text>)}

@@ -17,11 +17,15 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {TextInput} from 'react-native-gesture-handler';
 
 const ProfileScreen = props => {
+  const user = props.route.params.user;
+  const getCurrentUser = props
   const [netflix, setNetflix] = useState(true);
   const [prime, setPrime] = useState(true);
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(user.username);
   const [isLoading, setIsLoading] = useState(false);
-  const user = props.route.params.user;
+  const [changesMade, setChangesMade] = useState(false)
+  const [usernameIsEditing, setusernameIsEditing] = useState(false);
+
 
   const signOut = async () => {
     try {
@@ -32,10 +36,28 @@ const ProfileScreen = props => {
     }
   };
 
+  const usernameChanged = (newUsername) => {
+    setUsername(newUsername) 
+    setChangesMade(true)
+  }
+
+  const editusername = async () => {
+    
+    if (usernameIsEditing == true){
+      setusernameIsEditing(false)
+      console.log("wtf", usernameIsEditing)
+
+    }
+    else if (usernameIsEditing == false){
+      setusernameIsEditing(true)
+      console.log("wtf", usernameIsEditing)
+    }
+  };
+
   const save = async () => {
     if (user) {
       const updateUser = User.copyOf(user, updated => {
-        (updated.Prime = prime), (updated.Netflix = netflix);
+        (updated.Prime = prime), (updated.Netflix = netflix), (updated.username = username);
       });
       await DataStore.save(updateUser);
       Alert.alert('User updated');
@@ -51,16 +73,19 @@ const ProfileScreen = props => {
       await DataStore.save(newUser);
       Alert.alert('New user created');
     }
+    console.log('hit')
   };
 
   useEffect(() => {
+    getCurrentUser
     setNetflix(user.Netflix);
     setPrime(user.Prime);
+    setUsername(user.username)
   }, []);
 
   return (
     <SafeAreaView style={styles.root}>
-
+      <Text>{changesMade.toString()}</Text>
       <View style={styles.userPicContainer}>
         <Image
           style={styles.userPic}
@@ -72,48 +97,58 @@ const ProfileScreen = props => {
 
       <View style={styles.usernameContainer}>
         <TextInput
-          onChangeText={newUsername => {
-            setUsername(newUsername);
-          }}
+          onChangeText={newUsername => usernameChanged(newUsername)}
           style={styles.usernameInput}
+          autoCorrect={false}
+          editable={usernameIsEditing}
+          placeholder={user.username}
+          
         />
         <Pressable
           onPress={() => editusername()}
-          style={styles.editUsernameButton}>
-          <AntDesign name="edit"
-          style={styles.editUsernameButton}>Edit</AntDesign>
+          style={styles.editUsernameButton}
+          >
+          <AntDesign name="edit" style={styles.editUsernameButton}>
+            Edit
+          </AntDesign>
         </Pressable>
       </View>
 
-      <View style = {styles.streamingServicesContainer}>
-      <Text style={styles.streamingServicesText}> Streaming Services</Text>
-      <Pressable style={styles.option}>
-        <BouncyCheckbox
-          text="Netflix"
-          disableBuiltInState
-          isChecked={netflix}
-          onPress={() => {
-            setNetflix(!netflix);
-          }}
-        />
-      </Pressable>
-      <Pressable style={styles.option}>
-        <BouncyCheckbox
-          text="Prime"
-          disableBuiltInState
-          isChecked={prime}
-          onPress={() => {
-            setPrime(!prime);
-          }}
-        />
-      </Pressable>
+      <View style={styles.streamingServicesContainer}>
+        <Text style={styles.streamingServicesText}> Streaming Services</Text>
+        <Pressable style={styles.option}>
+          <BouncyCheckbox
+            text="Netflix"
+            disableBuiltInState
+            isChecked={netflix}
+            onPress={() => {
+              setNetflix(!netflix);
+              setChangesMade(true)
+            }}
+          />
+        </Pressable>
+        <Pressable 
+          style={styles.option}
+          >
+          <BouncyCheckbox
+            text="Prime"
+            disableBuiltInState
+            isChecked={prime}
+            onPress={() => {
+              setPrime(!prime);
+              setChangesMade(true)
+            }}
+          />
+        </Pressable>
       </View>
 
-
-
-
       <View style={styles.bottomButtonContainer}>
-        <Pressable onPress={save} style={styles.button}>
+        <Pressable 
+          style={styles.button}
+          disabled={false}
+          onPress={() => {
+            save()
+            }} >
           <Text>Save changes</Text>
         </Pressable>
 
@@ -129,29 +164,26 @@ const ProfileScreen = props => {
 const styles = StyleSheet.create({
   root: {
     flex: 4,
-
   },
-  userPicContainer:{
+  userPicContainer: {
     flex: 2,
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
-
   },
-  userPic:{
-    height:225,
+  userPic: {
+    height: 225,
     width: 225,
     borderWidth: 1,
     borderColor: 'black',
-    borderRadius: 225/2
+    borderRadius: 225/2,
   },
   usernameContainer: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-
   },
   usernameInput: {
     height: '40%',
@@ -162,17 +194,17 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
     borderRadius: 10,
+    fontSize: 20,
   },
   editUsernameButton: {
     fontSize: 20,
-    textAlignVertical: 'center'
+    textAlignVertical: 'center',
   },
-  streamingServicesContainer:{
-      flex: 1,
-      alignItems: 'center',
-
+  streamingServicesContainer: {
+    flex: 1,
+    alignItems: 'center',
   },
-  streamingServicesText:{
+  streamingServicesText: {
     fontSize: 20,
     margin: 5,
   },
@@ -187,7 +219,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: '100%',
     flex: 1,
-
   },
   button: {
     backgroundColor: '#D6173c',
