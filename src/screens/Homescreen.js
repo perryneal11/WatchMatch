@@ -104,18 +104,26 @@ const HomeScreen = props => {
     if (user) {
       //console.log('user', user);
       const likedMovies = []
-      user.approvedContentIMDBID.forEach(o => {
-        //console.log("object", o)
-        likedMovies.push(JSON.parse(o))
-      })
+
+      if(user.approvedContentIMDBID){
+        user.approvedContentIMDBID.forEach(o => {
+          //console.log("object", o)
+          likedMovies.push(JSON.parse(o))
+        })
+      }
+
       const likedMoviesimdbids = likedMovies.map(m=>m.imdbID)
       //console.log("likedMoviesimdbids", likedMoviesimdbids)
 
       const dislikedMovies = []
-      user.unapprovedContentIMDBID.forEach(o => {
-        //console.log("object", o)
-        dislikedMovies.push(JSON.parse(o))
-      })
+
+      if(user.unapprovedContentIMDBID){
+        user.unapprovedContentIMDBID.forEach(o => {
+          //console.log("object", o)
+          dislikedMovies.push(JSON.parse(o))
+        })
+      }
+
       const dislikedMoviesimdbids = dislikedMovies.map(m=>m.imdbID)
       //console.log("dislikedMoviesimdbids", dislikedMoviesimdbids)
 
