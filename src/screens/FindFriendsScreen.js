@@ -50,18 +50,26 @@ const FindFriendsScreen = props => {
 
   const search = async () => {
     setIsLoading(true);
-    //console.log('query', query);
+    console.log('query', query);
     var potentialFriendsVar = await DataStore.query(User, u =>
       u.username('contains', query.toLowerCase()),
     );
-    //console.log('results:', potentialFriendsVar.map(i=>i.awsID));
-    var friendsids = friends.map(p => p.awsID);
+    console.log('potentialfriendsvar', potentialFriendsVar)
+    console.log('results:', potentialFriendsVar.map(i=>i.awsID));
+
+
+
+    if (friends != null) {
+      friendsids = friends.map(p => p.awsID)
+    } else {
+      friendsids = []
+    }
     //console.log('friends ids', friendsids);
     //console.log('friends we filtered',potentialFriendsVar.filter(u=>!friendsids.includes(u.awsID) && u.username != user.username && u.requestAccepted == true));
 
     setUserHasSearchedYet(true);
     if (potentialFriendsVar.length > 0) {
-      //console.log("hit")
+      console.log("hit")
       setIsLoading(false);
       setQuery('');
       //console.log('heres what were passing to filter:', potentialFriendsVar.map(i=>i.awsID));

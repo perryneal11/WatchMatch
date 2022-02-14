@@ -44,7 +44,7 @@ const MatchesScreen = props => {
 
     const receivers = usersFriendships.map(f => f.Receiver);
     const senders = usersFriendships.map(f => f.Sender);
-    //console.log('rec', usersFriendships);
+    console.log('rec', usersFriendships);
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
     //console.log('wtf', friendsNoDuplicates);
@@ -55,7 +55,7 @@ const MatchesScreen = props => {
   useEffect(() => {
     let mounted = true;
     if (mounted) {
-      setIsLoading(true);
+      setIsLoading(false);
       getFriendsList();
       //console.log('hw;eoifhweoifh', friends != null);
     } else {
@@ -167,8 +167,7 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   noFriends: {
-    width: '100%',
-    hegiht: '100%',
+    flex: 1
   },
 });
 
