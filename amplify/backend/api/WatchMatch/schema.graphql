@@ -15,4 +15,4 @@ type User @model @auth(rules: [{allow: public}]) {
   username: String!
   awsID: String!
 }
- 
+  
