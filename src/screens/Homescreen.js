@@ -1,9 +1,11 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
   View,
   StyleSheet,
   Text,
   ActivityIndicator,
+  Button,
+  Alert,
 } from 'react-native';
 import Card from '../component/ShowCard/';
 import AnimatedStack from '../component/AnimatedStack/';
@@ -11,6 +13,7 @@ import {Auth, DataStore} from 'aws-amplify';
 import TopRow from '../component/ButtonBars/topRow';
 import {User} from '../models';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import YoutubePlayer from "react-native-youtube-iframe";
 
 const HomeScreen = props => {
   testData = [
@@ -63,6 +66,15 @@ const HomeScreen = props => {
   const [currentMovie, setCurrentMovie] = React.useState();
   const [isLoading, setIsLoading] = useState(false);
   const user = props.route.params.user
+  const [playing, setPlaying] = useState(false);
+
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      Alert.alert("video has finished playing!");
+    }
+  }, []);
+
 
   const fetchData = async () => {
     fetch(
@@ -170,6 +182,10 @@ const HomeScreen = props => {
     save(currentMovie, true);
   };
 
+  const togglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, []);
+
   useEffect(() => {
     setIsLoading(false);
   }, [filteredData]);
@@ -194,14 +210,33 @@ const HomeScreen = props => {
       ) : (
         <View style = {styles.animatedStack}>
           {!filteredData.length == 0 ? (
-            <AnimatedStack
+            
+            <>
+                  <YoutubePlayer
+        height={300}
+        width={300}
+        play={true}
+        videoId={"iee2TATGMyI"}
+        onChangeState={onStateChange}
+      />
+      <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
+           
+      <AnimatedStack
               data={filteredData}
               renderItem={({item}) => (
                 <Card movie={item}  />
               )}
               onSwipeLeft={onSwipeLeft}
               onSwipeRight={onSwipeRight}
-              setCurrentMovie={setCurrentMovie}></AnimatedStack>
+              setCurrentMovie={setCurrentMovie}>
+
+
+
+              </AnimatedStack>
+           
+            </>
+
+
           ) : (
             <Text stlye={styles.error}>No Movie Data</Text>
           )}
