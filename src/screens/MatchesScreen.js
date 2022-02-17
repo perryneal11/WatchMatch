@@ -92,8 +92,8 @@ const MatchesScreen = props => {
             )}
           />
         ) : (
-          <View style={styles.noFriends}>
-            <Text>No friends</Text>
+          <View style={styles.noFriendsContainer}>
+            <Text style={styles.noFriends}>No friends</Text>
           </View>
         )}
 
@@ -154,9 +154,16 @@ const styles = StyleSheet.create({
   username: {
     fontSize: 20
   },
-  noFriends: {
-    flex: 1
+  noFriendsContainer:{
+    flex: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  noFriends: {
+    fontSize: 20,
+
+  },
+
 });
 
 export default MatchesScreen;
