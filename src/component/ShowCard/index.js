@@ -1,16 +1,37 @@
-import React from 'react';
-import {Text, View, ImageBackground, StyleSheet} from 'react-native';
+import React, {useState, useCallback, Alert} from 'react';
+import {Text, Button, View, ImageBackground, StyleSheet} from 'react-native';
+import YoutubePlayer from 'react-native-youtube-iframe';
 
 const Card = props => {
   const {title, url, overview, movie} = props.movie;
+  const [playing, setPlaying] = useState(false);
 
   const image =  "https://image.tmdb.org/t/p/w300/" + props.movie.backdropPath
   //const image = "https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,h_465,q_auto,w_310/v1638549265/amc-cdn/production/2/movies/66500/66520/PosterDynamic/132670.jpg"
   //console.log("hello there", image, typeof props.movie)
   
+  const onStateChange = useCallback((state) => {
+    if (state === "ended") {
+      setPlaying(false);
+      Alert.alert("video has finished playing!");
+    }
+  }, []);
+
+  const togglePlaying = useCallback(() => {
+    setPlaying((prev) => !prev);
+  }, []);
+
   return (
     <View style={styles.card}>
       <ImageBackground source={{uri: image}} style={styles.image}>
+      <YoutubePlayer
+        height={300}
+        width={300}
+        play={true}
+        videoId={"iee2TATGMyI"}
+        onChangeState={onStateChange}
+      />
+      <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
         <View style={styles.cardInner}>
           <Text style={styles.name}>{title}</Text>
           <Text style={styles.description}>{overview}</Text>
