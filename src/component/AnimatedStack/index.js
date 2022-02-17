@@ -118,21 +118,21 @@ const AnimatedStack = props => {
 
 const styles = StyleSheet.create({
   root: {
-      width: '100%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     flex: 1,
   },
   animatedCard: {
-    width: '90%',
-    height: '70%',
+    width: '100%',
+    height: '90%',
     justifyContent: 'center',
     alignItems: 'center',
   },
   nextCardContainer: {
     ...StyleSheet.absoluteFillObject,
     width: '100%',
-    height: '70%',
+    height: '90%',
     justifyContent: 'center',
     alignItems: 'center',
   },

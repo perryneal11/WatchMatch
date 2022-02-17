@@ -1,10 +1,5 @@
 import React, {useEffect, useState, useCallback} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  ActivityIndicator,
-} from 'react-native';
+import {View, StyleSheet, Text, ActivityIndicator} from 'react-native';
 import Card from '../component/ShowCard/';
 import AnimatedStack from '../component/AnimatedStack/';
 import {Auth, DataStore} from 'aws-amplify';
@@ -12,69 +7,63 @@ import TopRow from '../component/ButtonBars/topRow';
 import {User} from '../models';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-
 const HomeScreen = props => {
   testData = [
     {
       title: 'movie',
       backdropPath: '/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg',
-      overview: 'This is an overview',
+      overview: 'This is an overview This is an overview This is an overview This is an overview This is an overview v vThis is an overview',
       imdbID: 'tt9850370',
-      video: "FzT7-NfkxLA"
+      video: 'FzT7-NfkxLA',
     },
     {
       title: 'movie2',
       backdropPath: '/a7f2CN7sBmFJJu5uO9BvDgqOEAc.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850380',
-      video: "VCVcijNLkvA"
+      video: 'VCVcijNLkvA',
     },
     {
       title: 'movie3',
       backdropPath: '/3uwyXMZN93PRkShUxvLrufwVAc2.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850360',
-      video: "3Sy7RofBmrs"
+      video: '3Sy7RofBmrs',
     },
     {
       title: 'movie4',
       backdropPath: '/4EXqDG8MZOeDO01N18HEZZRTUvk.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850400',
-      video: "2wn6pAIRjjY"
+      video: '2wn6pAIRjjY',
     },
     {
       title: 'movie5',
       backdropPath: '/6CyILXa0BOm6HtV4naOjg5B2RRZ.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850410',
-      video: "3E_fT0aTsjI"
+      video: '3E_fT0aTsjI',
     },
     {
       title: 'movie6',
       backdropPath: '/5eZ8kRSlD8P8a42y9GEGl1yAqOb.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850420',
-      video:"W1TCaha4zbk"
+      video: 'W1TCaha4zbk',
     },
     {
       title: 'movie7',
       backdropPath: '/rKzHtW1bdboA89FwiyRBNTY7edc.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850430',
-      video: "6JnFaltqnAY"
+      video: '6JnFaltqnAY',
     },
-    
   ];
   const [movieData, setMovieData] = React.useState(testData);
   const [filteredData, setFilteredData] = React.useState([]);
   const [currentMovie, setCurrentMovie] = React.useState();
   const [isLoading, setIsLoading] = useState(false);
-  const user = props.route.params.user
- 
-
-
-
+  const user = props.route.params.user;
 
   const fetchData = async () => {
     fetch(
@@ -109,34 +98,31 @@ const HomeScreen = props => {
     return setUser(dbUser);
   };
 
-
-  
-
   const filterMovieData = () => {
     if (user) {
       //console.log('user', user);
-      const likedMovies = []
+      const likedMovies = [];
 
-      if(user.approvedContentIMDBID){
+      if (user.approvedContentIMDBID) {
         user.approvedContentIMDBID.forEach(o => {
           //console.log("object", o)
-          likedMovies.push(JSON.parse(o))
-        })
+          likedMovies.push(JSON.parse(o));
+        });
       }
 
-      const likedMoviesimdbids = likedMovies.map(m=>m.imdbID)
+      const likedMoviesimdbids = likedMovies.map(m => m.imdbID);
       //console.log("likedMoviesimdbids", likedMoviesimdbids)
 
-      const dislikedMovies = []
+      const dislikedMovies = [];
 
-      if(user.unapprovedContentIMDBID){
+      if (user.unapprovedContentIMDBID) {
         user.unapprovedContentIMDBID.forEach(o => {
           //console.log("object", o)
-          dislikedMovies.push(JSON.parse(o))
-        })
+          dislikedMovies.push(JSON.parse(o));
+        });
       }
 
-      const dislikedMoviesimdbids = dislikedMovies.map(m=>m.imdbID)
+      const dislikedMoviesimdbids = dislikedMovies.map(m => m.imdbID);
       //console.log("dislikedMoviesimdbids", dislikedMoviesimdbids)
 
       if (likedMovies != null && dislikedMovies != null) {
@@ -148,9 +134,9 @@ const HomeScreen = props => {
               !dislikedMoviesimdbids.includes(item.imdbID),
           ),
         );
-      } else 
+      }
       //console.log('b');
-      return setFilteredData(movieData);
+      else return setFilteredData(movieData);
     }
   };
 
@@ -182,8 +168,6 @@ const HomeScreen = props => {
     save(currentMovie, true);
   };
 
-
-
   useEffect(() => {
     setIsLoading(false);
   }, [filteredData]);
@@ -201,33 +185,21 @@ const HomeScreen = props => {
   }, []);
   return (
     <SafeAreaView style={styles.pageContainer}>
-                  {isLoading ? (
+      {isLoading ? (
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <ActivityIndicator size="large" color="#5500dc" />
         </View>
       ) : (
-        <View style = {styles.animatedStack}>
+        <View style={styles.animatedStack}>
           {!filteredData.length == 0 ? (
-            
             <>
-
-           
-      <AnimatedStack
-              data={filteredData}
-              renderItem={({item}) => (
-                <Card movie={item}  />
-              )}
-              onSwipeLeft={onSwipeLeft}
-              onSwipeRight={onSwipeRight}
-              setCurrentMovie={setCurrentMovie}>
-
-
-
-              </AnimatedStack>
-           
+              <AnimatedStack
+                data={filteredData}
+                renderItem={({item}) => <Card movie={item} />}
+                onSwipeLeft={onSwipeLeft}
+                onSwipeRight={onSwipeRight}
+                setCurrentMovie={setCurrentMovie}></AnimatedStack>
             </>
-
-
           ) : (
             <Text stlye={styles.error}>No Movie Data</Text>
           )}
@@ -243,16 +215,14 @@ const styles = StyleSheet.create({
   pageContainer: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-    backgroundColor: '#ededed',
+    flex: 2,
   },
   animatedStack: {
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
-    backgroundColor: '#ededed',
+    flex: 2,
     width: '100%',
-    height: '100%'
+    height: '100%',
   },
   error: {
     flex: 6,

@@ -1,54 +1,62 @@
 import React, {useState, useCallback, Alert} from 'react';
-import {Text, Button, View, ImageBackground, StyleSheet} from 'react-native';
+import {
+  Text,
+  Button,
+  View,
+  ImageBackground,
+  StyleSheet,
+  Pressable,
+} from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
 const Card = props => {
   const {title, url, overview, movie, video} = props.movie;
   const [playing, setPlaying] = useState(false);
 
-  const image =  "https://image.tmdb.org/t/p/w300/" + props.movie.backdropPath
+  const image = 'https://image.tmdb.org/t/p/w300/' + props.movie.backdropPath;
   //const image = "https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,h_465,q_auto,w_310/v1638549265/amc-cdn/production/2/movies/66500/66520/PosterDynamic/132670.jpg"
-  console.log("hello there", props.movie, typeof props.movie)
-  
+  console.log('hello there', props.movie, typeof props.movie);
 
-  const onStateChange = useCallback((state) => {
-    if (state === "ended") {
+  const onStateChange = useCallback(state => {
+    if (state === 'ended') {
       setPlaying(false);
-      Alert.alert("video has finished playing!");
+      Alert.alert('video has finished playing!');
     }
   }, []);
 
   const togglePlaying = useCallback(() => {
-    setPlaying((prev) => !prev);
+    setPlaying(prev => !prev);
   }, []);
 
   return (
     <View style={styles.card}>
-      <ImageBackground source={{uri: image}} style={styles.image}>
       <YoutubePlayer
-        height={'100%'}
+        height={'70%'}
         width={'100%'}
-        play={false}
-        videoId={"W1TCaha4zbk"}
+        play={playing}
+        videoId={video}
         style={styles.video}
         onChangeState={onStateChange}
       />
-      <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
-        <View style={styles.cardInner}>
-          <Text style={styles.name}>{title}</Text>
-          <Text style={styles.description}>{overview}</Text>
-        </View>
-      </ImageBackground>
+      <View style={styles.cardInner}>
+        <Text style={styles.name}>{title}</Text>
+        <Text style={styles.description}>{overview}</Text>
+      </View>
+      <Pressable style={styles.play}>
+        <Text onPress={togglePlaying}>{playing ? 'pause' : 'play'}</Text>
+      </Pressable>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'green',
+    backgroundColor: 'black',
     width: '100%',
-    height: '120%',
+    height: '100%',
     borderRadius: 10,
+    alignContent: 'center',
+    justifyContent: 'center',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -56,19 +64,10 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.46,
     shadowRadius: 11.14,
-
     elevation: 17,
   },
-
-  image: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 10,
-    overflow: 'hidden',
-  },
-  video: {
-    height: '100%',
-    width: '100%'
+  cardInner: {
+    padding: 10,
   },
   name: {
     fontSize: 30,
@@ -80,9 +79,14 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-
-  cardInner: {
-    padding: 10,
+  play: {
+    backgroundColor: '#D6173c',
+    height: '10%',
+    width: '90%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    margin: 10,
   },
 });
 export default Card;
