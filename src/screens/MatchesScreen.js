@@ -33,9 +33,24 @@ const MatchesScreen = props => {
 
   const getFriendsList = async () => {
 
-    const usersFriendships = await DataStore.query(Friendship, Predicates.ALL)
-    .then(console.log('users friendsships', usersFriendships))
-    .catch(function(error){console.log(error)})
+    const usersFriendships = await DataStore.query(Friendship, f =>
+      f
+        .or(f =>
+          f
+            .friendshipSenderId('eq', user.id)
+            .friendshipReceiverId('eq', user.id),
+        )
+        .requestAccepted('eq', true),
+    );
+
+    const receivers = usersFriendships.map(f => f.Receiver);
+    const senders = usersFriendships.map(f => f.Sender);
+    console.log('rec', usersFriendships);
+    const friends = receivers.concat(senders).filter(u => u.id != user.id);
+    const friendsNoDuplicates = [...new Set(friends)];
+    console.log('wtf', friendsNoDuplicates);
+    setIsLoading(false);
+    return setFriends(friendsNoDuplicates);
 
 
   };
