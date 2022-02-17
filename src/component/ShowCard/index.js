@@ -30,6 +30,7 @@ const Card = props => {
 
   return (
     <View style={styles.card}>
+      <View pointerEvents="none" styles ={styles.videoContainer}>
       <YoutubePlayer
         height={'70%'}
         width={'100%'}
@@ -38,6 +39,9 @@ const Card = props => {
         style={styles.video}
         onChangeState={onStateChange}
       />
+
+      </View>
+
       <View style={styles.cardInner}>
         <Text style={styles.name}>{title}</Text>
         <Text style={styles.description}>{overview}</Text>
