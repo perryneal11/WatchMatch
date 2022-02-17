@@ -20,42 +20,49 @@ const HomeScreen = props => {
       backdropPath: '/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850370',
+      video: "FzT7-NfkxLA"
     },
     {
       title: 'movie2',
       backdropPath: '/a7f2CN7sBmFJJu5uO9BvDgqOEAc.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850380',
+      video: "VCVcijNLkvA"
     },
     {
       title: 'movie3',
       backdropPath: '/3uwyXMZN93PRkShUxvLrufwVAc2.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850360',
+      video: "3Sy7RofBmrs"
     },
     {
       title: 'movie4',
       backdropPath: '/4EXqDG8MZOeDO01N18HEZZRTUvk.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850400',
+      video: "2wn6pAIRjjY"
     },
     {
       title: 'movie5',
       backdropPath: '/6CyILXa0BOm6HtV4naOjg5B2RRZ.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850410',
+      video: "3E_fT0aTsjI"
     },
     {
       title: 'movie6',
       backdropPath: '/5eZ8kRSlD8P8a42y9GEGl1yAqOb.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850420',
+      video:"W1TCaha4zbk"
     },
     {
       title: 'movie7',
       backdropPath: '/rKzHtW1bdboA89FwiyRBNTY7edc.jpg',
       overview: 'This is an overview',
       imdbID: 'tt9850430',
+      video: "6JnFaltqnAY"
     },
     
   ];

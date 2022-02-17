@@ -3,13 +3,14 @@ import {Text, Button, View, ImageBackground, StyleSheet} from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
 const Card = props => {
-  const {title, url, overview, movie} = props.movie;
+  const {title, url, overview, movie, video} = props.movie;
   const [playing, setPlaying] = useState(false);
 
   const image =  "https://image.tmdb.org/t/p/w300/" + props.movie.backdropPath
   //const image = "https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,h_465,q_auto,w_310/v1638549265/amc-cdn/production/2/movies/66500/66520/PosterDynamic/132670.jpg"
-  //console.log("hello there", image, typeof props.movie)
+  console.log("hello there", props.movie, typeof props.movie)
   
+
   const onStateChange = useCallback((state) => {
     if (state === "ended") {
       setPlaying(false);
@@ -25,10 +26,11 @@ const Card = props => {
     <View style={styles.card}>
       <ImageBackground source={{uri: image}} style={styles.image}>
       <YoutubePlayer
-        height={300}
-        width={300}
-        play={true}
-        videoId={"iee2TATGMyI"}
+        height={'100%'}
+        width={'100%'}
+        play={false}
+        videoId={"W1TCaha4zbk"}
+        style={styles.video}
         onChangeState={onStateChange}
       />
       <Button title={playing ? "pause" : "play"} onPress={togglePlaying} />
@@ -63,9 +65,11 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 10,
     overflow: 'hidden',
-    justifyContent: 'flex-end',
   },
-  
+  video: {
+    height: '100%',
+    width: '100%'
+  },
   name: {
     fontSize: 30,
     color: 'white',
@@ -76,6 +80,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
+
   cardInner: {
     padding: 10,
   },
