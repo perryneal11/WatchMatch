@@ -8,101 +8,30 @@ import {User} from '../models';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 const HomeScreen = props => {
-  testData = [
-    {
-      title: 'movie',
-      backdropPath: '/pYziM5SEmptPW0LdNhWvjzR2zD1.jpg',
-      overview: 'This is an overview This is an overview This is an overview This is an overview This is an overview v vThis is an overview',
-      imdbID: 'tt9850370',
-      video: 'FzT7-NfkxLA',
-    },
-    {
-      title: 'movie2',
-      backdropPath: '/a7f2CN7sBmFJJu5uO9BvDgqOEAc.jpg',
-      overview: 'This is an overview',
-      imdbID: 'tt9850380',
-      video: 'VCVcijNLkvA',
-    },
-    {
-      title: 'movie3',
-      backdropPath: '/3uwyXMZN93PRkShUxvLrufwVAc2.jpg',
-      overview: 'This is an overview',
-      imdbID: 'tt9850360',
-      video: '3Sy7RofBmrs',
-    },
-    {
-      title: 'movie4',
-      backdropPath: '/4EXqDG8MZOeDO01N18HEZZRTUvk.jpg',
-      overview: 'This is an overview',
-      imdbID: 'tt9850400',
-      video: '2wn6pAIRjjY',
-    },
-    {
-      title: 'movie5',
-      backdropPath: '/6CyILXa0BOm6HtV4naOjg5B2RRZ.jpg',
-      overview: 'This is an overview',
-      imdbID: 'tt9850410',
-      video: '3E_fT0aTsjI',
-    },
-    {
-      title: 'movie6',
-      backdropPath: '/5eZ8kRSlD8P8a42y9GEGl1yAqOb.jpg',
-      overview: 'This is an overview',
-      imdbID: 'tt9850420',
-      video: 'W1TCaha4zbk',
-    },
-    {
-      title: 'movie7',
-      backdropPath: '/rKzHtW1bdboA89FwiyRBNTY7edc.jpg',
-      overview: 'This is an overview',
-      imdbID: 'tt9850430',
-      video: '6JnFaltqnAY',
-    },
-  ];
-  const [movieData, setMovieData] = React.useState(testData);
+  const [movieData, setMovieData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [currentMovie, setCurrentMovie] = React.useState();
   const [isLoading, setIsLoading] = useState(false);
   const user = props.route.params.user;
 
   const fetchData = async () => {
-    fetch(
-      'https://streaming-availability.p.rapidapi.com/search/basic?country=us&service=netflix&type=movie&output_language=en&language=en',
-      {
-        method: 'GET',
-        headers: {
-          'x-rapidapi-host': 'streaming-availability.p.rapidapi.com',
-          'x-rapidapi-key':
-            'db460db4c2msha835e81c42d874ep1c1433jsnb1e93e0e6758',
-        },
-      },
-    )
+    console.log('HITTING');
+    fetch('https://radiant-reaches-78484.herokuapp.com/getMovies', {
+      method: 'GET',
+    })
       .then(response => response.json())
       .then(data => {
-        //setMovieData(data.results)
+        console.log(data);
+        setMovieData(data);
       })
       .catch(err => {
         console.error(err);
       });
   };
 
-  const getCurrentUser = async () => {
-    const userVar = await Auth.currentAuthenticatedUser();
-    //console.log('user in get current user', userVar.attributes);
-    const dbUsers = await DataStore.query(User, u =>
-      u.awsID('eq', userVar.attributes.sub),
-    );
-    //console.log('dbusers', dbUsers);
-    const dbUser = dbUsers[0];
-    //console.log('dbuser', dbUser);
-    return setUser(dbUser);
-  };
-
   const filterMovieData = () => {
     if (user) {
-      //console.log('user', user);
       const likedMovies = [];
-
       if (user.approvedContentIMDBID) {
         user.approvedContentIMDBID.forEach(o => {
           //console.log("object", o)
@@ -136,7 +65,9 @@ const HomeScreen = props => {
         );
       }
       //console.log('b');
-      else return setFilteredData(movieData);
+      else {
+        return setFilteredData(movieData);
+      }
     }
   };
 
@@ -178,11 +109,11 @@ const HomeScreen = props => {
 
   useEffect(() => {
     setIsLoading(true);
-    //console.log("user from home", props.route.params.user.username)
-    //fetchData()
-    //getCurrentUser();
+    fetchData();
     filterMovieData(movieData);
+    console.log(movieData);
   }, []);
+
   return (
     <SafeAreaView style={styles.pageContainer}>
       {isLoading ? (
@@ -198,7 +129,8 @@ const HomeScreen = props => {
                 renderItem={({item}) => <Card movie={item} />}
                 onSwipeLeft={onSwipeLeft}
                 onSwipeRight={onSwipeRight}
-                setCurrentMovie={setCurrentMovie}></AnimatedStack>
+                setCurrentMovie={setCurrentMovie}
+              />
             </>
           ) : (
             <Text stlye={styles.error}>No Movie Data</Text>
@@ -206,7 +138,7 @@ const HomeScreen = props => {
         </View>
       )}
 
-      <TopRow screen="HOME"></TopRow>
+      <TopRow screen="HOME" />
     </SafeAreaView>
   );
 };
