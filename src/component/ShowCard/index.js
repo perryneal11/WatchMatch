@@ -15,7 +15,7 @@ const Card = props => {
 
   const image = 'https://image.tmdb.org/t/p/w300/' + props.movie.backdropPath;
   //const image = "https://amc-theatres-res.cloudinary.com/image/upload/f_auto,fl_lossy,h_465,q_auto,w_310/v1638549265/amc-cdn/production/2/movies/66500/66520/PosterDynamic/132670.jpg"
-  console.log('hello there', props.movie, typeof props.movie);
+  
 
   const onStateChange = useCallback(state => {
     if (state === 'ended') {

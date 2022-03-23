@@ -23,8 +23,7 @@ const HomeScreen = props => {
         setMovieData(data);
         setIsLoading(false)
       })
-      .catch(err => {console.log(err)});
-  };
+      .catch(err => {})}
 
   const filterMovieData = () => {
     if (user) {
