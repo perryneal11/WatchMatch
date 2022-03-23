@@ -10,6 +10,8 @@ import {
 } from 'react-native';
 import AnimatedStack from '../component/AnimatedStack/';
 import Card from '../component/ShowCard/';
+import TopRow from '../component/ButtonBars/topRow';
+
 
 const WatchMatchesScreen = ({route, navigation}) => {
   const friend = route.params;
@@ -110,6 +112,7 @@ const WatchMatchesScreen = ({route, navigation}) => {
         <Text>No shows you both like</Text>
       )}
               </View>
+              <TopRow screen="MATCHES" />
     </SafeAreaView>
   );
 };
