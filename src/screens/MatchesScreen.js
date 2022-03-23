@@ -10,15 +10,13 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-
 import TopRow from '../component/ButtonBars/topRow';
-import {Auth, DataStore, Predicates} from 'aws-amplify';
+import {DataStore} from 'aws-amplify';
 import {useEffect} from 'react/cjs/react.development';
 import {Friendship, FriendshipUser, User} from '../models';
 import {useNavigation} from '@react-navigation/native';
 
 const MatchesScreen = props => {
-  //const [user, setUser] = useState({});
   const user = props.route.params.user;
   const [friends, setFriends] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -27,12 +25,10 @@ const MatchesScreen = props => {
     'https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_960_720.png';
 
   const viewWatchMatches = item => {
-    //console.log('yay', item);
     navigation.navigate('WatchMatches', {friend: item, user: user});
   };
 
   const getFriendsList = async () => {
-
     const usersFriendships = await DataStore.query(Friendship, f =>
       f
         .or(f =>
@@ -45,14 +41,10 @@ const MatchesScreen = props => {
 
     const receivers = usersFriendships.map(f => f.Receiver);
     const senders = usersFriendships.map(f => f.Sender);
-    console.log('rec', usersFriendships);
     const friends = receivers.concat(senders).filter(u => u.id != user.id);
     const friendsNoDuplicates = [...new Set(friends)];
-    console.log('wtf', friendsNoDuplicates);
     setIsLoading(false);
     return setFriends(friendsNoDuplicates);
-
-
   };
 
   useEffect(() => {
@@ -60,12 +52,15 @@ const MatchesScreen = props => {
     if (mounted) {
       setIsLoading(false);
       getFriendsList();
-      //console.log('hw;eoifhweoifh', friends != null);
     } else {
-      //console.log('mounting issue');
     }
     return () => (mounted = false);
   }, []);
+
+  React.useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {});
+    return unsubscribe;
+  }, [navigation]);
 
   if (isLoading) {
     return (
@@ -87,17 +82,19 @@ const MatchesScreen = props => {
               <View style={styles.listItem}>
                 <View style={styles.userPicContainer}>
                   <Image
-                  style={styles.userPic}
-                  source={{
-                    uri: 'https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_960_720.png',
-                  }}
-                /></View>
-                <View style = {styles.usernameContainer}>
-                <Text style={styles.username}>{item.username}</Text>
-
+                    style={styles.userPic}
+                    source={{
+                      uri: 'https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_960_720.png',
+                    }}
+                  />
+                </View>
+                <View style={styles.usernameContainer}>
+                  <Text style={styles.username}>{item.username}</Text>
                 </View>
 
-                <Pressable onPress={() => viewWatchMatches(item)} style= {styles.playButtonContainer}>
+                <Pressable
+                  onPress={() => viewWatchMatches(item)}
+                  style={styles.playButtonContainer}>
                   <AntDesign
                     name="play"
                     style={styles.playButton}
@@ -124,61 +121,57 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   flatList: {
-    flex: 6
+    flex: 6,
   },
   listItem: {
     flex: 7,
     borderTopColor: 'grey',
     borderBottomColor: 'grey',
-    borderTopWidth: .01,
-    borderBottomWidth:1,
+    borderTopWidth: 0.01,
+    borderBottomWidth: 1,
     margin: 3,
     padding: 20,
     flexDirection: 'row',
     flexWrap: 'nowrap',
     justifyContent: 'space-around',
   },
-  userPicContainer:{
+  userPicContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   userPic: {
     flex: 1,
     height: 50,
     width: 50,
-    borderRadius: 50/2,
-
+    borderRadius: 50 / 2,
   },
-  playButtonContainer:{
+  playButtonContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   playButton: {
     flex: 1,
     color: 'green',
-    
   },
   usernameContainer: {
     flex: 5,
     justifyContent: 'center',
     alignItems: 'flex-start',
-    margin: 10
+    margin: 10,
   },
   username: {
-    fontSize: 20
+    fontSize: 20,
   },
-  noFriendsContainer:{
+  noFriendsContainer: {
     flex: 6,
     justifyContent: 'center',
     alignItems: 'center',
   },
   noFriends: {
     fontSize: 20,
-
   },
-
 });
 
 export default MatchesScreen;
