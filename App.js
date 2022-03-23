@@ -27,9 +27,9 @@ const App = () => {
   useEffect(() => {
     const getCurrentUser = async ()=> {
         const who = await Auth.currentAuthenticatedUser()
-        console.log("who", who)
+        
         const dbUsers = await DataStore.query(User, u => u.awsID('eq', who.attributes.sub))
-        console.log("dbusers", dbUsers)    
+            
         if(dbUsers.length < 1) {
           const authUser = await Auth.currentAuthenticatedUser()
           const newUser = new User({
@@ -38,9 +38,9 @@ const App = () => {
               awsID: authUser.attributes.sub,
               username: authUser.attributes.email
           })
-          await DataStore.save(newUser).then(Alert.alert("New user created")).catch((err) => {console.log(err)})
+          await DataStore.save(newUser).then(Alert.alert("New user created")).catch((err) => {
               return setUser(newUser);
-            } else {
+            })} else {
                 
                 const dbUser = dbUsers[0];
                 setUser(dbUser)
@@ -52,7 +52,7 @@ const App = () => {
     getCurrentUser();
 },[])
 
-console.log("user from app", user)
+
   const Stack = createNativeStackNavigator();
   return (
     <NavigationContainer>
