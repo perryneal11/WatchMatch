@@ -30,16 +30,15 @@ const Card = props => {
 
   return (
     <View style={styles.card}>
-      <View pointerEvents="none" styles ={styles.videoContainer}>
-      <YoutubePlayer
-        height={'70%'}
-        width={'100%'}
-        play={playing}
-        videoId={video}
-        style={styles.video}
-        onChangeState={onStateChange}
-      />
-
+      <View pointerEvents="none" style ={styles.videoContainer}>
+        <YoutubePlayer
+          height={'70%'}
+          width={'100%'}
+          play={playing}
+          videoId={video}
+          style={styles.video}
+          onChangeState={onStateChange}
+        />
       </View>
 
       <View style={styles.cardInner}>
@@ -59,6 +58,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     borderRadius: 10,
+    flex: 7,
     alignContent: 'center',
     justifyContent: 'center',
     shadowColor: '#000',
@@ -70,8 +70,14 @@ const styles = StyleSheet.create({
     shadowRadius: 11.14,
     elevation: 17,
   },
+  videoContainer:{
+    flex: 3,
+    justifyContent: 'center',
+
+  },
   cardInner: {
     padding: 10,
+    flex: 3
   },
   name: {
     fontSize: 30,
@@ -84,6 +90,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   play: {
+    flex: 1,
     backgroundColor: '#D6173c',
     height: '10%',
     width: '90%',

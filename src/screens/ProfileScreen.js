@@ -85,7 +85,6 @@ const ProfileScreen = props => {
 
   return (
     <SafeAreaView style={styles.root}>
-      <Text>{changesMade.toString()}</Text>
       <View style={styles.userPicContainer}>
         <Image
           style={styles.userPic}
