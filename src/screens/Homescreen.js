@@ -11,22 +11,19 @@ const HomeScreen = props => {
   const [movieData, setMovieData] = React.useState([]);
   const [filteredData, setFilteredData] = React.useState([]);
   const [currentMovie, setCurrentMovie] = React.useState();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const user = props.route.params.user;
 
   const fetchData = async () => {
-    console.log('HITTING');
     fetch('https://radiant-reaches-78484.herokuapp.com/getMovies', {
       method: 'GET',
     })
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         setMovieData(data);
+        setIsLoading(false)
       })
-      .catch(err => {
-        console.error(err);
-      });
+      .catch(err => {console.log(err)});
   };
 
   const filterMovieData = () => {
@@ -34,28 +31,28 @@ const HomeScreen = props => {
       const likedMovies = [];
       if (user.approvedContentIMDBID) {
         user.approvedContentIMDBID.forEach(o => {
-          //console.log("object", o)
+        
           likedMovies.push(JSON.parse(o));
         });
       }
 
       const likedMoviesimdbids = likedMovies.map(m => m.imdbID);
-      //console.log("likedMoviesimdbids", likedMoviesimdbids)
+      
 
       const dislikedMovies = [];
 
       if (user.unapprovedContentIMDBID) {
         user.unapprovedContentIMDBID.forEach(o => {
-          //console.log("object", o)
+          
           dislikedMovies.push(JSON.parse(o));
         });
       }
 
       const dislikedMoviesimdbids = dislikedMovies.map(m => m.imdbID);
-      //console.log("dislikedMoviesimdbids", dislikedMoviesimdbids)
+      
 
       if (likedMovies != null && dislikedMovies != null) {
-        //console.log('filtered ',movieData.filter(item =>!likedMoviesimdbids.includes(item.imdbID) &&!dislikedMoviesimdbids.includes(item.imdbID),),);
+        
         return setFilteredData(
           movieData.filter(
             item =>
@@ -64,7 +61,7 @@ const HomeScreen = props => {
           ),
         );
       }
-      //console.log('b');
+
       else {
         return setFilteredData(movieData);
       }
@@ -72,7 +69,7 @@ const HomeScreen = props => {
   };
 
   const save = async (newIMDBID, approved) => {
-    //console.log('SAVING', currentMovie.imdbID);
+    //
     const updateUser = User.copyOf(user, updated => {
       if (approved == true) {
         if (updated.approvedContentIMDBID == null) {
@@ -100,10 +97,6 @@ const HomeScreen = props => {
   };
 
   useEffect(() => {
-    setIsLoading(false);
-  }, [filteredData]);
-
-  useEffect(() => {
     filterMovieData(movieData);
   }, [movieData]);
 
@@ -111,7 +104,6 @@ const HomeScreen = props => {
     setIsLoading(true);
     fetchData();
     filterMovieData(movieData);
-    console.log(movieData);
   }, []);
 
   return (
