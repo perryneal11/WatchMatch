@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, StyleSheet, SafeAreaView, Text} from 'react-native';
+import {View, StyleSheet, SafeAreaView, Text, Alert} from 'react-native';
 import HomeScreen from './src/screens/Homescreen.js';
 import ProfileScreen from './src/screens/ProfileScreen.js';
 import FindFriendsScreen from './src/screens/FindFriendsScreen.js';
@@ -38,12 +38,8 @@ const App = () => {
               awsID: authUser.attributes.sub,
               username: authUser.attributes.email
           })
-          await DataStore.save(newUser)
-          Alert.alert("New user created")  
-          
-      
-          
-              return;
+          await DataStore.save(newUser).then(Alert.alert("New user created")).catch((err) => {console.log(err)})
+              return setUser(newUser);
             } else {
                 
                 const dbUser = dbUsers[0];
