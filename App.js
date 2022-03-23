@@ -38,8 +38,14 @@ const App = () => {
               awsID: authUser.attributes.sub,
               username: authUser.attributes.email
           })
-          await DataStore.save(newUser).then(Alert.alert("New user created")).catch((err) => {
-              return setUser(newUser);
+          await DataStore.save(newUser)
+          .then( function () {
+          Alert.alert("New user created")
+          return setUser(newUser)
+          }
+          ).catch((err) => {
+            console.log(err)
+
             })} else {
                 
                 const dbUser = dbUsers[0];
