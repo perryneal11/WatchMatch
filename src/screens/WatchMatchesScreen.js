@@ -20,18 +20,22 @@ const WatchMatchesScreen = ({route, navigation}) => {
     const combinedShows = [];
     const usersShows = [];
     const friendsShows = [];
+    if (friend.friend.approvedContentIMDBID != null && route.params.user.approvedContentIMDBID != null) {
+      friend.friend.approvedContentIMDBID.forEach(o => {
+        //console.log("friend", o)
+        friendsShows.push(JSON.parse(o));
+        combinedShows.push(JSON.parse(o));
+      });
+  
+      route.params.user.approvedContentIMDBID.forEach(o => {
+        //console.log("user", o)
+        usersShows.push(JSON.parse(o));
+        combinedShows.push(JSON.parse(o));
+      });
 
-    friend.friend.approvedContentIMDBID.forEach(o => {
-      //console.log("friend", o)
-      friendsShows.push(JSON.parse(o));
-      combinedShows.push(JSON.parse(o));
-    });
 
-    route.params.user.approvedContentIMDBID.forEach(o => {
-      //console.log("user", o)
-      usersShows.push(JSON.parse(o));
-      combinedShows.push(JSON.parse(o));
-    });
+    }
+
 
     //console.log("combined shows", combinedShows)
 
@@ -91,9 +95,9 @@ const WatchMatchesScreen = ({route, navigation}) => {
         </Text>
       </View>
       
+      <View style={styles.showsContainer}>
+      {shows.length > 0 ? (
 
-      {shows ? (
-        <View style={styles.showsContainer}>
           <AnimatedStack
             data={shows}
             renderItem={({item}) => <Card movie={item} />}
@@ -101,10 +105,11 @@ const WatchMatchesScreen = ({route, navigation}) => {
             onSwipeRight={onSwipeRight}
             setCurrentMovie={setCurrentMovie}
             resetFlag={true}></AnimatedStack>
-        </View>
+
       ) : (
         <Text>No shows you both like</Text>
       )}
+              </View>
     </SafeAreaView>
   );
 };
